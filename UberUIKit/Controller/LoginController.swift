@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import JGProgressHUD
 
 final class LoginController: UIViewController {
     // MARK: - Properties
@@ -47,6 +48,7 @@ final class LoginController: UIViewController {
         let button = UberWideButton(type: .system)
         button.setTitle("Log In", for: .normal)
         button.applyStyling()
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return button
     }()
     
@@ -74,6 +76,8 @@ final class LoginController: UIViewController {
         return button
     }()
     
+    weak var delegate: HomeControllerDelegate?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,7 +90,28 @@ final class LoginController: UIViewController {
     // MARK: - Selectors
     @objc private func presentRegisterView() {
         let registerController = RegisterController()
+        registerController.delegate = delegate
         navigationController?.pushViewController(registerController, animated: true)
+    }
+    
+    @objc private func handleLogin() {
+        UberLoadingIndicator.show(in: view)
+        
+        Task {
+            do {
+                try await AuthService.loginUser(email: emailTextField.text, password: passwordTextField.text)
+                
+                delegate?.setupUI()
+                
+                await UberLoadingIndicator.displaySuccess()
+                
+                dismiss(animated: true)
+            } catch {
+                await UberLoadingIndicator.displaFail()
+                
+                presentErrorAlert(error)
+            }
+        }
     }
 }
 

@@ -20,8 +20,8 @@ final class RegisterController: UIViewController {
     private lazy var mainStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [
             titleLabel,
-            emailContainerView,
             fullNameContainerView,
+            emailContainerView,
             passwordContainerView,
             confirmPasswordContainerView,
             accountTypeContainerView,
@@ -33,12 +33,12 @@ final class RegisterController: UIViewController {
         return stackView
     }()
     
-    private lazy var emailContainerView: UIView = {
-        return UberTextFieldContainerView(image: SFSymbol.Auth.email, textfield: emailTextField)
-    }()
-    
     private lazy var fullNameContainerView: UIView = {
         return UberTextFieldContainerView(image: SFSymbol.Auth.fullName, textfield: fullNameTextField)
+    }()
+    
+    private lazy var emailContainerView: UIView = {
+        return UberTextFieldContainerView(image: SFSymbol.Auth.email, textfield: emailTextField)
     }()
     
     private lazy var passwordContainerView: UIView = {
@@ -53,12 +53,12 @@ final class RegisterController: UIViewController {
         return UberTextFieldContainerView(image: SFSymbol.Auth.fullName, segmentedControl: accountTypeSegmentedControl)
     }()
     
-    private lazy var emailTextField: UITextField = {
-        return UberTextField(placeholder: "Email")
-    }()
-    
     private lazy var fullNameTextField: UITextField = {
         return UberTextField(placeholder: "Full Name")
+    }()
+    
+    private lazy var emailTextField: UITextField = {
+        return UberTextField(placeholder: "Email")
     }()
     
     private lazy var passwordTextField: UITextField = {
@@ -70,7 +70,8 @@ final class RegisterController: UIViewController {
     }()
     
     private lazy var accountTypeSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["Rider", "Driver"])
+        let accountTypes = AccountType.allCases.map { $0.name }
+        let segmentedControl = UISegmentedControl(items: accountTypes)
         segmentedControl.backgroundColor = .colorSchemeBackgroundColor
         segmentedControl.tintColor = .colorSchemeForegroundColor
         segmentedControl.selectedSegmentIndex = 0
@@ -81,6 +82,7 @@ final class RegisterController: UIViewController {
         let button = UberWideButton(type: .system)
         button.setTitle("Register", for: .normal)
         button.applyStyling()
+        button.addTarget(self, action: #selector(handleRegistration), for: .touchUpInside)
         return button
     }()
     
@@ -107,6 +109,8 @@ final class RegisterController: UIViewController {
         return button
     }()
     
+    weak var delegate: HomeControllerDelegate?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,6 +122,32 @@ final class RegisterController: UIViewController {
     // MARK: - Selectors
     @objc private func dismissRegisterView() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func handleRegistration() {
+        UberLoadingIndicator.show(in: view)
+        
+        Task {
+            do {
+                try await AuthService.registerUser(
+                    email: emailTextField.text,
+                    fullName: fullNameTextField.text,
+                    password: passwordTextField.text,
+                    confirmPassword: confirmPasswordTextField.text,
+                    accountType: AccountType(rawValue: accountTypeSegmentedControl.selectedSegmentIndex) ?? .rider
+                )
+                
+                delegate?.setupUI()
+                
+                await UberLoadingIndicator.displaySuccess()
+                
+                dismiss(animated: true)
+            } catch {
+                await UberLoadingIndicator.displaFail()
+                
+                presentErrorAlert(error)
+            }
+        }
     }
 }
 

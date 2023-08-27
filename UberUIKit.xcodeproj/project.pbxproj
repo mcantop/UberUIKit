@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5233C4142A9AA9C800E8AD4D /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */; };
+		5233C4162A9AABE300E8AD4D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4152A9AABE300E8AD4D /* User.swift */; };
+		5233C4192A9AAD6200E8AD4D /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5233C4182A9AAD6200E8AD4D /* JGProgressHUD */; };
+		5233C41B2A9B6DE100E8AD4D /* JGProgressHUD+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C41A2A9B6DE100E8AD4D /* JGProgressHUD+Extension.swift */; };
+		5283C8DC2A9A62D3000593DA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DB2A9A62D3000593DA /* FirebaseAuth */; };
+		5283C8DE2A9A62D3000593DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DD2A9A62D3000593DA /* FirebaseFirestore */; };
+		5283C8E02A9A62D3000593DA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DF2A9A62D3000593DA /* FirebaseFirestoreSwift */; };
+		5283C8E22A9A87AD000593DA /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5283C8E12A9A87AD000593DA /* HomeController.swift */; };
+		5283C8E72A9AA5AE000593DA /* AccountType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5283C8E62A9AA5AE000593DA /* AccountType.swift */; };
+		5283C8E92A9AA6EE000593DA /* AuthServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5283C8E82A9AA6EE000593DA /* AuthServiceError.swift */; };
 		52F82EF62A89424A00816E34 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F82EF52A89424A00816E34 /* AppDelegate.swift */; };
 		52F82EF82A89424B00816E34 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F82EF72A89424B00816E34 /* SceneDelegate.swift */; };
 		52F82EFF2A89424B00816E34 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52F82EFE2A89424B00816E34 /* Assets.xcassets */; };
@@ -22,13 +32,18 @@
 		52F82F232A8ABF1600816E34 /* UIFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F82F222A8ABF1600816E34 /* UIFont+Extension.swift */; };
 		52F82F252A8AC5A100816E34 /* UberWideButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F82F242A8AC5A100816E34 /* UberWideButton.swift */; };
 		52F82F272A8B8C2400816E34 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 52F82F262A8B8C2400816E34 /* GoogleService-Info.plist */; };
-		52F82F2A2A8B8DA500816E34 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 52F82F292A8B8DA500816E34 /* FirebaseAuth */; };
-		52F82F2C2A8B8DA500816E34 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 52F82F2B2A8B8DA500816E34 /* FirebaseFirestore */; };
 		52F82F2F2A8B8DC400816E34 /* GeoFire in Frameworks */ = {isa = PBXBuildFile; productRef = 52F82F2E2A8B8DC400816E34 /* GeoFire */; };
 		52F82F312A8B8DC400816E34 /* GeoFireUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 52F82F302A8B8DC400816E34 /* GeoFireUtils */; };
+		52F82F332A8B900600816E34 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F82F322A8B900600816E34 /* AuthService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		5233C4152A9AABE300E8AD4D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5233C41A2A9B6DE100E8AD4D /* JGProgressHUD+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JGProgressHUD+Extension.swift"; sourceTree = "<group>"; };
+		5283C8E12A9A87AD000593DA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		5283C8E62A9AA5AE000593DA /* AccountType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountType.swift; sourceTree = "<group>"; };
+		5283C8E82A9AA6EE000593DA /* AuthServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceError.swift; sourceTree = "<group>"; };
 		52F82EF22A89424A00816E34 /* UberUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52F82EF52A89424A00816E34 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52F82EF72A89424B00816E34 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -46,6 +61,7 @@
 		52F82F222A8ABF1600816E34 /* UIFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extension.swift"; sourceTree = "<group>"; };
 		52F82F242A8AC5A100816E34 /* UberWideButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberWideButton.swift; sourceTree = "<group>"; };
 		52F82F262A8B8C2400816E34 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		52F82F322A8B900600816E34 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,10 +69,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5283C8E02A9A62D3000593DA /* FirebaseFirestoreSwift in Frameworks */,
 				52F82F2F2A8B8DC400816E34 /* GeoFire in Frameworks */,
-				52F82F2A2A8B8DA500816E34 /* FirebaseAuth in Frameworks */,
+				5283C8DE2A9A62D3000593DA /* FirebaseFirestore in Frameworks */,
+				5283C8DC2A9A62D3000593DA /* FirebaseAuth in Frameworks */,
+				5233C4192A9AAD6200E8AD4D /* JGProgressHUD in Frameworks */,
 				52F82F312A8B8DC400816E34 /* GeoFireUtils in Frameworks */,
-				52F82F2C2A8B8DA500816E34 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +123,8 @@
 				52F82F132A89538900816E34 /* UIColor+Extension.swift */,
 				52F82F222A8ABF1600816E34 /* UIFont+Extension.swift */,
 				52F82F172A895C0000816E34 /* Constraints.swift */,
+				5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */,
+				5233C41A2A9B6DE100E8AD4D /* JGProgressHUD+Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -114,6 +134,7 @@
 			children = (
 				52F82F0E2A894B9600816E34 /* LoginController.swift */,
 				52F82F202A8AB89C00816E34 /* RegisterController.swift */,
+				5283C8E12A9A87AD000593DA /* HomeController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -129,6 +150,8 @@
 		52F82F0C2A894AE200816E34 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5283C8E62A9AA5AE000593DA /* AccountType.swift */,
+				5233C4152A9AABE300E8AD4D /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -136,6 +159,8 @@
 		52F82F0D2A894AF500816E34 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				52F82F322A8B900600816E34 /* AuthService.swift */,
+				5283C8E82A9AA6EE000593DA /* AuthServiceError.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -167,10 +192,12 @@
 			);
 			name = UberUIKit;
 			packageProductDependencies = (
-				52F82F292A8B8DA500816E34 /* FirebaseAuth */,
-				52F82F2B2A8B8DA500816E34 /* FirebaseFirestore */,
 				52F82F2E2A8B8DC400816E34 /* GeoFire */,
 				52F82F302A8B8DC400816E34 /* GeoFireUtils */,
+				5283C8DB2A9A62D3000593DA /* FirebaseAuth */,
+				5283C8DD2A9A62D3000593DA /* FirebaseFirestore */,
+				5283C8DF2A9A62D3000593DA /* FirebaseFirestoreSwift */,
+				5233C4182A9AAD6200E8AD4D /* JGProgressHUD */,
 			);
 			productName = UberUIKit;
 			productReference = 52F82EF22A89424A00816E34 /* UberUIKit.app */;
@@ -201,8 +228,9 @@
 			);
 			mainGroup = 52F82EE92A89424A00816E34;
 			packageReferences = (
-				52F82F282A8B8DA400816E34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				52F82F2D2A8B8DC400816E34 /* XCRemoteSwiftPackageReference "geofire-objc" */,
+				5283C8DA2A9A62D3000593DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5233C4172A9AAD6200E8AD4D /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 			);
 			productRefGroup = 52F82EF32A89424A00816E34 /* Products */;
 			projectDirPath = "";
@@ -232,14 +260,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				52F82F212A8AB89C00816E34 /* RegisterController.swift in Sources */,
+				5283C8E92A9AA6EE000593DA /* AuthServiceError.swift in Sources */,
 				52F82EF62A89424A00816E34 /* AppDelegate.swift in Sources */,
+				5283C8E22A9A87AD000593DA /* HomeController.swift in Sources */,
+				5233C4142A9AA9C800E8AD4D /* UIViewController+Extension.swift in Sources */,
 				52F82F182A895C0000816E34 /* Constraints.swift in Sources */,
+				5283C8E72A9AA5AE000593DA /* AccountType.swift in Sources */,
 				52F82F0F2A894B9600816E34 /* LoginController.swift in Sources */,
+				5233C41B2A9B6DE100E8AD4D /* JGProgressHUD+Extension.swift in Sources */,
 				52F82EF82A89424B00816E34 /* SceneDelegate.swift in Sources */,
 				52F82F1F2A8A3CA700816E34 /* UberTextFieldContainerView.swift in Sources */,
+				52F82F332A8B900600816E34 /* AuthService.swift in Sources */,
 				52F82F162A89581C00816E34 /* UIImage+Extension.swift in Sources */,
 				52F82F112A89530700816E34 /* UIView+Extension.swift in Sources */,
 				52F82F142A89538900816E34 /* UIColor+Extension.swift in Sources */,
+				5233C4162A9AABE300E8AD4D /* User.swift in Sources */,
 				52F82F1D2A8A3C2400816E34 /* UberTextField.swift in Sources */,
 				52F82F252A8AC5A100816E34 /* UberWideButton.swift in Sources */,
 				52F82F232A8ABF1600816E34 /* UIFont+Extension.swift in Sources */,
@@ -462,7 +497,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		52F82F282A8B8DA400816E34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		5233C4172A9AAD6200E8AD4D /* XCRemoteSwiftPackageReference "JGProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/JonasGessner/JGProgressHUD";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		5283C8DA2A9A62D3000593DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -481,15 +524,25 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		52F82F292A8B8DA500816E34 /* FirebaseAuth */ = {
+		5233C4182A9AAD6200E8AD4D /* JGProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 52F82F282A8B8DA400816E34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 5233C4172A9AAD6200E8AD4D /* XCRemoteSwiftPackageReference "JGProgressHUD" */;
+			productName = JGProgressHUD;
+		};
+		5283C8DB2A9A62D3000593DA /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5283C8DA2A9A62D3000593DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
-		52F82F2B2A8B8DA500816E34 /* FirebaseFirestore */ = {
+		5283C8DD2A9A62D3000593DA /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 52F82F282A8B8DA400816E34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 5283C8DA2A9A62D3000593DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		5283C8DF2A9A62D3000593DA /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5283C8DA2A9A62D3000593DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
 		};
 		52F82F2E2A8B8DC400816E34 /* GeoFire */ = {
 			isa = XCSwiftPackageProductDependency;
