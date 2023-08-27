@@ -100,12 +100,12 @@ final class LoginController: UIViewController {
         Task {
             do {
                 try await AuthService.loginUser(email: emailTextField.text, password: passwordTextField.text)
-                
-                delegate?.setupUI()
-                
+                                
                 await UberLoadingIndicator.displaySuccess()
-                
+                                
                 dismiss(animated: true)
+                
+                delegate?.handleUserLoggedInFlow()
             } catch {
                 await UberLoadingIndicator.displaFail()
                 

@@ -11,6 +11,7 @@
 		5233C4162A9AABE300E8AD4D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4152A9AABE300E8AD4D /* User.swift */; };
 		5233C4192A9AAD6200E8AD4D /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5233C4182A9AAD6200E8AD4D /* JGProgressHUD */; };
 		5233C41B2A9B6DE100E8AD4D /* UberLoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C41A2A9B6DE100E8AD4D /* UberLoadingIndicator.swift */; };
+		5233C41D2A9B91A400E8AD4D /* LocationDeniedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C41C2A9B91A400E8AD4D /* LocationDeniedController.swift */; };
 		5283C8DC2A9A62D3000593DA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DB2A9A62D3000593DA /* FirebaseAuth */; };
 		5283C8DE2A9A62D3000593DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DD2A9A62D3000593DA /* FirebaseFirestore */; };
 		5283C8E02A9A62D3000593DA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DF2A9A62D3000593DA /* FirebaseFirestoreSwift */; };
@@ -41,6 +42,7 @@
 		5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		5233C4152A9AABE300E8AD4D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5233C41A2A9B6DE100E8AD4D /* UberLoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberLoadingIndicator.swift; sourceTree = "<group>"; };
+		5233C41C2A9B91A400E8AD4D /* LocationDeniedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDeniedController.swift; sourceTree = "<group>"; };
 		5283C8E12A9A87AD000593DA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		5283C8E62A9AA5AE000593DA /* AccountType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountType.swift; sourceTree = "<group>"; };
 		5283C8E82A9AA6EE000593DA /* AuthServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceError.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				52F82F0E2A894B9600816E34 /* LoginController.swift */,
 				52F82F202A8AB89C00816E34 /* RegisterController.swift */,
 				5283C8E12A9A87AD000593DA /* HomeController.swift */,
+				5233C41C2A9B91A400E8AD4D /* LocationDeniedController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 				5233C41B2A9B6DE100E8AD4D /* UberLoadingIndicator.swift in Sources */,
 				52F82EF82A89424B00816E34 /* SceneDelegate.swift in Sources */,
 				52F82F1F2A8A3CA700816E34 /* UberTextFieldContainerView.swift in Sources */,
+				5233C41D2A9B91A400E8AD4D /* LocationDeniedController.swift in Sources */,
 				52F82F332A8B900600816E34 /* AuthService.swift in Sources */,
 				52F82F162A89581C00816E34 /* UIImage+Extension.swift in Sources */,
 				52F82F112A89530700816E34 /* UIView+Extension.swift in Sources */,
@@ -421,6 +425,9 @@
 				DEVELOPMENT_TEAM = QZ46JW4C9U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = UberUIKit/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Please allow us access to your location so we can find you rides nearby.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Please allow us access to your location so we can find you rides nearby.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow us access to your location so we can find you rides nearby.";
 				INFOPLIST_KEY_NSMainStoryboardFile = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -452,6 +459,9 @@
 				DEVELOPMENT_TEAM = QZ46JW4C9U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = UberUIKit/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Please allow us access to your location so we can find you rides nearby.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Please allow us access to your location so we can find you rides nearby.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allow us access to your location so we can find you rides nearby.";
 				INFOPLIST_KEY_NSMainStoryboardFile = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

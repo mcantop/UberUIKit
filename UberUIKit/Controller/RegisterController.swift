@@ -137,7 +137,7 @@ final class RegisterController: UIViewController {
                     accountType: AccountType(rawValue: accountTypeSegmentedControl.selectedSegmentIndex) ?? .rider
                 )
                 
-                delegate?.setupUI()
+                delegate?.handleUserLoggedInFlow()
                 
                 await UberLoadingIndicator.displaySuccess()
                 
