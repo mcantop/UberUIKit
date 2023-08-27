@@ -1,5 +1,5 @@
 //
-//  JGProgressHUD+Extension.swift
+//  UberLoadingIndicator.swift
 //  UberUIKit
 //
 //  Created by Maciej on 27/08/2023.

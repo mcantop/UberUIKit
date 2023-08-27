@@ -31,7 +31,7 @@ struct AuthService {
         guard let email,
               let fullName,
               let password,
-              let confirmPassword else { throw AuthServiceError.fieldsEmpty }
+              let confirmPassword else { return }
         
         if email.isEmpty || fullName.isEmpty || password.isEmpty || confirmPassword.isEmpty {
             throw AuthServiceError.fieldsEmpty
