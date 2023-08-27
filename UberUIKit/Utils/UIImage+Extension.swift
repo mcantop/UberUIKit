@@ -17,5 +17,7 @@ extension UIImage {
             static let confirmPassword = UIImage(systemName: "lock.trianglebadge.exclamationmark")
             static let fullName = UIImage(systemName: "person")
         }
+        
+        static let leftArrow = UIImage(systemName: "arrow.left")
     }
 }

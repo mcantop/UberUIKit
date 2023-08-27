@@ -19,7 +19,7 @@ final class UberWideButton: UIButton {
     func applyStyling() {
         setTitleColor(.white, for: .normal)
         backgroundColor = .systemBlue
-        titleLabel?.font = UIFont.set(size: .title3, weight: .semibold)
+        titleLabel?.font = .set(size: .title3, weight: .semibold)
         layer.cornerRadius = 5
         heightAnchor.constraint(equalToConstant: 50).isActive = true
     }

@@ -39,6 +39,10 @@ extension UIColor {
         return UIColor { $0.userInterfaceStyle == .dark ? Uber.Background.dark : Uber.Background.light }
     }
     
+    static var colorSchemeShadowColor: UIColor {
+        return UIColor { $0.userInterfaceStyle == .dark ? .darkGray : .black }
+    }
+    
     func withOpacity(_ type: OpacityType = .default) -> UIColor {
         return withAlphaComponent(type.value)
     }
