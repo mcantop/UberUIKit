@@ -9,6 +9,10 @@ import UIKit
 
 final class RegisterController: UIViewController {
     // MARK: - Properties
+    weak var delegate: HomeControllerDelegate?
+    
+    private let authService = AuthService.shared
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Uber"
@@ -108,9 +112,7 @@ final class RegisterController: UIViewController {
         
         return button
     }()
-    
-    weak var delegate: HomeControllerDelegate?
-    
+        
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,7 +131,7 @@ final class RegisterController: UIViewController {
         
         Task {
             do {
-                try await AuthService.registerUser(
+                try await authService.registerUser(
                     email: emailTextField.text,
                     fullName: fullNameTextField.text,
                     password: passwordTextField.text,

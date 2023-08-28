@@ -10,6 +10,10 @@ import JGProgressHUD
 
 final class LoginController: UIViewController {
     // MARK: - Properties
+    weak var delegate: HomeControllerDelegate?
+    
+    private let authService = AuthService.shared
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Uber"
@@ -75,9 +79,7 @@ final class LoginController: UIViewController {
         
         return button
     }()
-    
-    weak var delegate: HomeControllerDelegate?
-    
+        
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,7 +101,7 @@ final class LoginController: UIViewController {
         
         Task {
             do {
-                try await AuthService.loginUser(email: emailTextField.text, password: passwordTextField.text)
+                try await authService.loginUser(email: emailTextField.text, password: passwordTextField.text)
                                 
                 await UberLoadingIndicator.displaySuccess()
                                 

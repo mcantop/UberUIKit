@@ -26,6 +26,7 @@ final class HomeController: UIViewController {
     // MARK: - Properties
     private let mapView = MKMapView()
     private let locationManager = CLLocationManager()
+    private let authService = AuthService.shared
     
     private lazy var locationInputActivationView = LocationInputActivationView()
     private lazy var locationInputView = LocationInputView()
@@ -33,6 +34,12 @@ final class HomeController: UIViewController {
     
     private var isUserLoggedIn: Bool {
         return Auth.auth().currentUser?.uid != nil
+    }
+    
+    private var user: User? {
+        didSet {
+            locationInputView.setFullNameLabel(user?.fullName)
+        }
     }
     
     // MARK: - Lifecycle
@@ -53,8 +60,8 @@ final class HomeController: UIViewController {
 extension HomeController: HomeControllerDelegate {
     func handleUserLoggedInFlow() {
         setupUI()
-        
         enableLocationServices()
+        fetchUserData()
     }
 }
 
@@ -124,6 +131,12 @@ private extension HomeController {
             navigationController.modalPresentationStyle = .fullScreen
             
             self.present(navigationController, animated: true)
+        }
+    }
+    
+    func fetchUserData() {
+        Task {
+            self.user = try await authService.loadUserData()
         }
     }
     

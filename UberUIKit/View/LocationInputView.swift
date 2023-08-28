@@ -30,7 +30,7 @@ final class LocationInputView: UIView {
         return button
     }()
     
-    private lazy var userNameLabel: UILabel = {
+    private lazy var fullNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Maciej Cantop"
         label.font = .set(size: .headline, weight: .semibold)
@@ -105,10 +105,18 @@ final class LocationInputView: UIView {
     }
 }
 
+// MARK: - Public API
+extension LocationInputView {
+    func setFullNameLabel(_ fullName: String?) {
+        fullNameLabel.text = fullName
+    }
+}
+
+// MARK: - Private API
 private extension LocationInputView {
     func setupUI() {
         addSubview(backButton)
-        addSubview(userNameLabel)
+        addSubview(fullNameLabel)
         addSubview(startLocationTextField)
         addSubview(destinationLocationTextField)
         addSubview(startLocationIndicatorView)
@@ -123,7 +131,7 @@ private extension LocationInputView {
     /// High Elo Constraints XD
     func setupConstraints() {
         backButton.translatesAutoresizingMaskIntoConstraints = false
-        userNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
         startLocationTextField.translatesAutoresizingMaskIntoConstraints = false
         startLocationIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         linkingView.translatesAutoresizingMaskIntoConstraints = false
@@ -134,15 +142,15 @@ private extension LocationInputView {
             backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             
-            userNameLabel.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
-            userNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            fullNameLabel.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
+            fullNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             startLocationIndicatorView.centerYAnchor.constraint(equalTo: startLocationTextField.centerYAnchor),
             startLocationIndicatorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.edgePaddding),
             startLocationIndicatorView.widthAnchor.constraint(equalToConstant: 8),
             startLocationIndicatorView.heightAnchor.constraint(equalToConstant: 8),
             
-            startLocationTextField.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: Constants.edgePaddding),
+            startLocationTextField.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor, constant: Constants.edgePaddding),
             startLocationTextField.leadingAnchor.constraint(equalTo: startLocationIndicatorView.trailingAnchor, constant: Constants.edgePaddding),
             startLocationTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.edgePaddding),
             startLocationTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight),

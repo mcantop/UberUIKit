@@ -10,8 +10,14 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseAuth
 
+private enum Constants {
+    static let usersCollection = Firestore.firestore().collection("users")
+}
+
 struct AuthService {
-    static func loginUser(email: String?, password: String?) async throws {
+    static let shared = AuthService()
+    
+    func loginUser(email: String?, password: String?) async throws {
         guard let email,
               let password else { return }
         
@@ -21,13 +27,12 @@ struct AuthService {
 
         do {
             try await Auth.auth().signIn(withEmail: email, password: password)
-            try await loadUserData()
         } catch {
             throw error
         }
     }
     
-    static func registerUser(email: String?, fullName: String?, password: String?, confirmPassword: String?, accountType: AccountType) async throws {
+    func registerUser(email: String?, fullName: String?, password: String?, confirmPassword: String?, accountType: AccountType) async throws {
         guard let email,
               let fullName,
               let password,
@@ -51,8 +56,18 @@ struct AuthService {
             )
             
             try await uploadUserData(user)
+        } catch {
+            throw error
+        }
+    }
+    
+    func loadUserData() async throws -> User? {
+        do {
+            guard let uid = Auth.auth().currentUser?.uid else { return nil }
             
-            print("[DEBUG] Successfully registerd a new user: \(user.fullName)")
+            let snapshot = try await Constants.usersCollection.document(uid).getDocument()
+            let user = try snapshot.data(as: User.self)
+            return user
         } catch {
             throw error
         }
@@ -60,24 +75,11 @@ struct AuthService {
 }
 
 private extension AuthService {
-    static func uploadUserData(_ user: User) async throws {
+    func uploadUserData(_ user: User) async throws {
         do {
             guard let userEncoded = try? Firestore.Encoder().encode(user) else { return }
             
-            try await Firestore.firestore().collection("users").document(user.id).setData(userEncoded)
-        } catch {
-            throw error
-        }
-    }
-    
-    static func loadUserData() async throws {
-        do {
-            guard let uid = Auth.auth().currentUser?.uid else { return }
-            
-            let snapshot = try await Firestore.firestore().collection("users").document(uid).getDocument()
-            let user = try snapshot.data(as: User.self)
-            
-            print("[DEBUG] Loaded user \(user.fullName)")
+            try await Constants.usersCollection.document(user.id).setData(userEncoded)
         } catch {
             throw error
         }
