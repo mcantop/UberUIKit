@@ -25,12 +25,15 @@ private enum Constants {
 final class HomeController: UIViewController {
     // MARK: - Properties
     private let mapView = MKMapView()
-    private let locationManager = CLLocationManager()
+    private let service = Service.shared
     private let authService = AuthService.shared
+    private let locationService = LocationService.shared
+    private var locationManager: LocationManager?
     
     private lazy var locationInputActivationView = LocationInputActivationView()
     private lazy var locationInputView = LocationInputView()
     private lazy var tableView = UITableView()
+    private lazy var logoutButton = UIButton(type: .system)
     
     private var isUserLoggedIn: Bool {
         return Auth.auth().currentUser?.uid != nil
@@ -39,6 +42,8 @@ final class HomeController: UIViewController {
     private var user: User? {
         didSet {
             locationInputView.setFullNameLabel(user?.fullName)
+
+            updateUserLocation()
         }
     }
     
@@ -46,22 +51,29 @@ final class HomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        signout()
+        
         if isUserLoggedIn {
             handleUserLoggedInFlow()
         } else {
             presentLoginView()
         }
-        
-        //        signout()
+    }
+    
+    @objc private func handleSignout() {
+        signout()
     }
 }
 
 // MARK: - HomeControllerDelegate
 extension HomeController: HomeControllerDelegate {
     func handleUserLoggedInFlow() {
+        locationManager = LocationManager.shared
+        locationManager?.delegate = self
+        
         setupUI()
-        enableLocationServices()
-        fetchUserData()
+        loadUserData()
+        loadNearbyDrivers()
     }
 }
 
@@ -73,11 +85,28 @@ private extension HomeController {
         setupMapView()
         setupLocationInputActivationView()
         setupTableView()
+        setupLogoutButton()
+
+    }
+    
+    func setupLogoutButton() {
+        view.addSubview(logoutButton)
+        
+        logoutButton.setTitle("Logout", for: .normal)
+        logoutButton.addTarget(self, action: #selector(handleSignout), for: .touchUpInside)
+        
+        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            logoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -48)
+        ])
     }
     
     func setupMapView() {
         view.addSubview(mapView)
         
+        mapView.delegate = self
         mapView.frame = view.frame
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
@@ -134,14 +163,47 @@ private extension HomeController {
         }
     }
     
-    func fetchUserData() {
+    func loadUserData() {
         Task {
-            self.user = try await authService.loadUserData()
+            user = try await service.loadUserData()
+        }
+    }
+    
+    func loadNearbyDrivers() {
+        locationService.loadNearbyDrivers(for: locationManager?.location) { drivers in
+            for driver in drivers {
+                guard let latitude = driver.location?.latitude,
+                      let longitude = driver.location?.longitude else { return }
+                let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                let annotation = DriverAnnotation(uid: driver.id, coordinate: coordinate)
+                
+                var isAnnotationVisible: Bool {
+                    for annotation in self.mapView.annotations {
+                        if
+                            let driverAnnotation = annotation as? DriverAnnotation,
+                            driverAnnotation.uid == driver.id
+                        {
+                            print("[DEBUG] Updating annotation for Driver - \(driver.fullName)")
+                            driverAnnotation.updateAnnotation(withNewCoordinate: coordinate)
+                            return true
+                        }
+                    }
+                    return false
+                }
+                
+                if !isAnnotationVisible {
+                    self.mapView.addAnnotation(annotation)
+                } else {
+                    
+                }
+            }
         }
     }
     
     func signout() {
         try? Auth.auth().signOut()
+        
+        presentLoginView()
     }
 }
 
@@ -212,44 +274,29 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-// MARK: - LocationServices && CLLocationManagerDelegate
-extension HomeController: CLLocationManagerDelegate {
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch manager.authorizationStatus {
-        case .authorizedWhenInUse:
-            locationManager.requestAlwaysAuthorization()
-        case .authorizedAlways, .notDetermined:
-            break
-        case .restricted, .denied:
-            fallthrough
-        @unknown default:
-            presentLocationDeniedController()
-        }
-    }
-    
-    private func enableLocationServices() {
-        locationManager.delegate = self
+// MARK: - MKMapViewDelegate
+extension HomeController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let annotation = annotation as? DriverAnnotation else { return nil }
         
-        switch locationManager.authorizationStatus {
-        case .notDetermined:
-            print("[DEBUG] Location Auth Status - Not Determined")
-            locationManager.requestWhenInUseAuthorization()
-        case .authorizedAlways:
-            print("[DEBUG] Location Auth Status - Auth Always")
-            locationManager.startUpdatingLocation()
-            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        case .authorizedWhenInUse:
-            print("[DEBUG] Location Auth Status - Auth when In Use")
-            locationManager.requestAlwaysAuthorization()
-        case .restricted, .denied:
-            fallthrough
-        @unknown default:
-            print("[DEBUG] Wrong Location Auth Status")
-            presentLocationDeniedController()
-        }
+        let view = MKAnnotationView(annotation: annotation, reuseIdentifier: DriverAnnotation.reuseIdentifier)
+        view.image = SFSymbol.car?.style(size: .title2, weight: .black)
+        return view
+    }
+}
+
+// MARK: -  LocationManagerDelegate
+extension HomeController: LocationManagerDelegate {
+    func presentLocationDeniedController() {
+        navigationController?.pushViewController(LocationDeniedController(), animated: true)
     }
     
-    private func presentLocationDeniedController() {
-        navigationController?.pushViewController(LocationDeniedController(), animated: true)
+    func updateUserLocation() {
+        Task {
+             await locationService.updateUserLocation(
+                user: user,
+                coordinate: locationManager?.location?.coordinate
+            )
+        }
     }
 }

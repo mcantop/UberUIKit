@@ -14,8 +14,7 @@ final class UberTextFieldContainerView: UIView {
         if let textfield {
             let imageView = UIImageView()
             imageView.image = image?
-                .withConfiguration(UIImage.SymbolConfiguration(scale: .large))
-                .withTintColor(.colorSchemeForegroundColor, renderingMode: .alwaysOriginal)
+                .style(size: .largeTitle, weight: .semibold)
             imageView.contentMode = .scaleAspectFit
             imageView.alpha = OpacityType.default.value
             

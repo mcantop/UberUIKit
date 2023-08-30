@@ -13,6 +13,7 @@ final class UberTextField: UITextField {
         
         borderStyle = .none
         isSecureTextEntry = isSecure
+        textContentType = .oneTimeCode
         font = .preferredFont(forTextStyle: .body)
         attributedPlaceholder = NSAttributedString(
             string: placeholder,

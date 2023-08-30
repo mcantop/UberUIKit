@@ -22,9 +22,8 @@ final class LocationInputView: UIView {
     
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(paletteColors: [.colorSchemeForegroundColor])
-            .applying(UIImage.SymbolConfiguration(font: .set(size: .headline, weight: .bold)))
-        let image = SFSymbol.leftArrow?.withConfiguration(config)
+        let image = SFSymbol.leftArrow?
+            .style(size: .headline, weight: .bold)
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         return button

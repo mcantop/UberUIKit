@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52319C9C2A9E421500DF0A4D /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52319C9B2A9E421500DF0A4D /* LocationService.swift */; };
+		52319C9E2A9E439500DF0A4D /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52319C9D2A9E439500DF0A4D /* Service.swift */; };
 		5233C4142A9AA9C800E8AD4D /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */; };
 		5233C4162A9AABE300E8AD4D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4152A9AABE300E8AD4D /* User.swift */; };
 		5233C4192A9AAD6200E8AD4D /* JGProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 5233C4182A9AAD6200E8AD4D /* JGProgressHUD */; };
@@ -16,6 +18,8 @@
 		5233C4212A9BD9B700E8AD4D /* LocationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4202A9BD9B700E8AD4D /* LocationInputView.swift */; };
 		5233C4232A9BFCD100E8AD4D /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4222A9BFCD100E8AD4D /* LocationCell.swift */; };
 		5233C4252A9BFD9400E8AD4D /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4242A9BFD9400E8AD4D /* Reusable.swift */; };
+		5233C4272A9C24AC00E8AD4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4262A9C24AC00E8AD4D /* LocationManager.swift */; };
+		5262C70E2A9FE0E90047B5D9 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */; };
 		5283C8DC2A9A62D3000593DA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DB2A9A62D3000593DA /* FirebaseAuth */; };
 		5283C8DE2A9A62D3000593DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DD2A9A62D3000593DA /* FirebaseFirestore */; };
 		5283C8E02A9A62D3000593DA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DF2A9A62D3000593DA /* FirebaseFirestoreSwift */; };
@@ -43,6 +47,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		52319C9B2A9E421500DF0A4D /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		52319C9D2A9E439500DF0A4D /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		5233C4152A9AABE300E8AD4D /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5233C41A2A9B6DE100E8AD4D /* UberLoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberLoadingIndicator.swift; sourceTree = "<group>"; };
@@ -51,10 +57,12 @@
 		5233C4202A9BD9B700E8AD4D /* LocationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputView.swift; sourceTree = "<group>"; };
 		5233C4222A9BFCD100E8AD4D /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		5233C4242A9BFD9400E8AD4D /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		5233C4262A9C24AC00E8AD4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		5283C8E12A9A87AD000593DA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		5283C8E62A9AA5AE000593DA /* AccountType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountType.swift; sourceTree = "<group>"; };
 		5283C8E82A9AA6EE000593DA /* AuthServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceError.swift; sourceTree = "<group>"; };
-		52F82EF22A89424A00816E34 /* UberUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		52F82EF22A89424A00816E34 /* UberUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = UberUIKit.app; path = "/Users/maciej/Documents/Documents/iOS Development/UIKit Projects/UberUIKit/build/Debug-iphoneos/UberUIKit.app"; sourceTree = "<absolute>"; };
 		52F82EF52A89424A00816E34 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52F82EF72A89424B00816E34 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		52F82EFE2A89424B00816E34 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -91,20 +99,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		52319C9F2A9E44FB00DF0A4D /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				5233C4262A9C24AC00E8AD4D /* LocationManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		52F82EE92A89424A00816E34 = {
 			isa = PBXGroup;
 			children = (
 				52F82EF42A89424A00816E34 /* UberUIKit */,
-				52F82EF32A89424A00816E34 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		52F82EF32A89424A00816E34 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				52F82EF22A89424A00816E34 /* UberUIKit.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		52F82EF42A89424A00816E34 /* UberUIKit */ = {
@@ -114,6 +121,7 @@
 				52F82F0B2A894AE000816E34 /* View */,
 				52F82F0A2A894AE000816E34 /* Controller */,
 				52F82F0D2A894AF500816E34 /* Service */,
+				52319C9F2A9E44FB00DF0A4D /* Manager */,
 				52F82F092A894ADF00816E34 /* Utils */,
 				52F82EF52A89424A00816E34 /* AppDelegate.swift */,
 				52F82EF72A89424B00816E34 /* SceneDelegate.swift */,
@@ -164,8 +172,9 @@
 		52F82F0C2A894AE200816E34 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5283C8E62A9AA5AE000593DA /* AccountType.swift */,
 				5233C4152A9AABE300E8AD4D /* User.swift */,
+				5283C8E62A9AA5AE000593DA /* AccountType.swift */,
+				5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -173,8 +182,10 @@
 		52F82F0D2A894AF500816E34 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				52319C9D2A9E439500DF0A4D /* Service.swift */,
 				52F82F322A8B900600816E34 /* AuthService.swift */,
 				5283C8E82A9AA6EE000593DA /* AuthServiceError.swift */,
+				52319C9B2A9E421500DF0A4D /* LocationService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -247,7 +258,7 @@
 				5283C8DA2A9A62D3000593DA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				5233C4172A9AAD6200E8AD4D /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 			);
-			productRefGroup = 52F82EF32A89424A00816E34 /* Products */;
+			productRefGroup = 52F82EE92A89424A00816E34;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -274,6 +285,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52319C9E2A9E439500DF0A4D /* Service.swift in Sources */,
 				52F82F212A8AB89C00816E34 /* RegisterController.swift in Sources */,
 				5283C8E92A9AA6EE000593DA /* AuthServiceError.swift in Sources */,
 				52F82EF62A89424A00816E34 /* AppDelegate.swift in Sources */,
@@ -285,12 +297,15 @@
 				5233C41B2A9B6DE100E8AD4D /* UberLoadingIndicator.swift in Sources */,
 				52F82EF82A89424B00816E34 /* SceneDelegate.swift in Sources */,
 				5233C4212A9BD9B700E8AD4D /* LocationInputView.swift in Sources */,
+				52319C9C2A9E421500DF0A4D /* LocationService.swift in Sources */,
 				52F82F1F2A8A3CA700816E34 /* UberTextFieldContainerView.swift in Sources */,
 				5233C4252A9BFD9400E8AD4D /* Reusable.swift in Sources */,
 				5233C41D2A9B91A400E8AD4D /* LocationDeniedController.swift in Sources */,
 				5233C4232A9BFCD100E8AD4D /* LocationCell.swift in Sources */,
 				52F82F332A8B900600816E34 /* AuthService.swift in Sources */,
+				5262C70E2A9FE0E90047B5D9 /* DriverAnnotation.swift in Sources */,
 				52F82F162A89581C00816E34 /* UIImage+Extension.swift in Sources */,
+				5233C4272A9C24AC00E8AD4D /* LocationManager.swift in Sources */,
 				52F82F112A89530700816E34 /* UIView+Extension.swift in Sources */,
 				52F82F142A89538900816E34 /* UIColor+Extension.swift in Sources */,
 				5233C4162A9AABE300E8AD4D /* User.swift in Sources */,

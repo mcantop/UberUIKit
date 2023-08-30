@@ -19,5 +19,13 @@ extension UIImage {
         }
         
         static let leftArrow = UIImage(systemName: "arrow.left")
+        
+        static let car = UIImage(systemName: "car.side.fill")
+    }
+    
+    func style(color: UIColor = .colorSchemeForegroundColor, size: UIFont.TextStyle, weight: UIFont.Weight) -> UIImage {
+        let config = UIImage.SymbolConfiguration(paletteColors: [color])
+            .applying(UIImage.SymbolConfiguration(font: .set(size: size, weight: weight)))
+        return self.withConfiguration(config).withRenderingMode(.alwaysTemplate)
     }
 }
