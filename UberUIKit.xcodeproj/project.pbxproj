@@ -16,10 +16,11 @@
 		5233C41D2A9B91A400E8AD4D /* LocationDeniedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C41C2A9B91A400E8AD4D /* LocationDeniedController.swift */; };
 		5233C41F2A9BADF800E8AD4D /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C41E2A9BADF800E8AD4D /* LocationInputActivationView.swift */; };
 		5233C4212A9BD9B700E8AD4D /* LocationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4202A9BD9B700E8AD4D /* LocationInputView.swift */; };
-		5233C4232A9BFCD100E8AD4D /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4222A9BFCD100E8AD4D /* LocationCell.swift */; };
+		5233C4232A9BFCD100E8AD4D /* LocationSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4222A9BFCD100E8AD4D /* LocationSearchResultCell.swift */; };
 		5233C4252A9BFD9400E8AD4D /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4242A9BFD9400E8AD4D /* Reusable.swift */; };
 		5233C4272A9C24AC00E8AD4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4262A9C24AC00E8AD4D /* LocationManager.swift */; };
 		5262C70E2A9FE0E90047B5D9 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */; };
+		5262C7102AA001E00047B5D9 /* MKPlacemark+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262C70F2AA001E00047B5D9 /* MKPlacemark+Extension.swift */; };
 		5283C8DC2A9A62D3000593DA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DB2A9A62D3000593DA /* FirebaseAuth */; };
 		5283C8DE2A9A62D3000593DA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DD2A9A62D3000593DA /* FirebaseFirestore */; };
 		5283C8E02A9A62D3000593DA /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5283C8DF2A9A62D3000593DA /* FirebaseFirestoreSwift */; };
@@ -55,10 +56,11 @@
 		5233C41C2A9B91A400E8AD4D /* LocationDeniedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDeniedController.swift; sourceTree = "<group>"; };
 		5233C41E2A9BADF800E8AD4D /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
 		5233C4202A9BD9B700E8AD4D /* LocationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputView.swift; sourceTree = "<group>"; };
-		5233C4222A9BFCD100E8AD4D /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		5233C4222A9BFCD100E8AD4D /* LocationSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchResultCell.swift; sourceTree = "<group>"; };
 		5233C4242A9BFD9400E8AD4D /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		5233C4262A9C24AC00E8AD4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
+		5262C70F2AA001E00047B5D9 /* MKPlacemark+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlacemark+Extension.swift"; sourceTree = "<group>"; };
 		5283C8E12A9A87AD000593DA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		5283C8E62A9AA5AE000593DA /* AccountType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountType.swift; sourceTree = "<group>"; };
 		5283C8E82A9AA6EE000593DA /* AuthServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceError.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */,
 				52F82F172A895C0000816E34 /* Constraints.swift */,
 				5233C4242A9BFD9400E8AD4D /* Reusable.swift */,
+				5262C70F2AA001E00047B5D9 /* MKPlacemark+Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -164,7 +167,7 @@
 				52F82F1B2A8A3C1100816E34 /* Reusable */,
 				5233C41E2A9BADF800E8AD4D /* LocationInputActivationView.swift */,
 				5233C4202A9BD9B700E8AD4D /* LocationInputView.swift */,
-				5233C4222A9BFCD100E8AD4D /* LocationCell.swift */,
+				5233C4222A9BFCD100E8AD4D /* LocationSearchResultCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				52319C9E2A9E439500DF0A4D /* Service.swift in Sources */,
 				52F82F212A8AB89C00816E34 /* RegisterController.swift in Sources */,
 				5283C8E92A9AA6EE000593DA /* AuthServiceError.swift in Sources */,
+				5262C7102AA001E00047B5D9 /* MKPlacemark+Extension.swift in Sources */,
 				52F82EF62A89424A00816E34 /* AppDelegate.swift in Sources */,
 				5283C8E22A9A87AD000593DA /* HomeController.swift in Sources */,
 				5233C4142A9AA9C800E8AD4D /* UIViewController+Extension.swift in Sources */,
@@ -301,7 +305,7 @@
 				52F82F1F2A8A3CA700816E34 /* UberTextFieldContainerView.swift in Sources */,
 				5233C4252A9BFD9400E8AD4D /* Reusable.swift in Sources */,
 				5233C41D2A9B91A400E8AD4D /* LocationDeniedController.swift in Sources */,
-				5233C4232A9BFCD100E8AD4D /* LocationCell.swift in Sources */,
+				5233C4232A9BFCD100E8AD4D /* LocationSearchResultCell.swift in Sources */,
 				52F82F332A8B900600816E34 /* AuthService.swift in Sources */,
 				5262C70E2A9FE0E90047B5D9 /* DriverAnnotation.swift in Sources */,
 				52F82F162A89581C00816E34 /* UIImage+Extension.swift in Sources */,

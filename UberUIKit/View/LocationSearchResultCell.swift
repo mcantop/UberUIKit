@@ -1,18 +1,26 @@
 //
-//  LocationCell.swift
+//  LocationSearchResultCell.swift
 //  UberUIKit
 //
 //  Created by Maciej on 27/08/2023.
 //
 
 import UIKit
+import MapKit
 
 private enum Constants {
     static let padding = 16.0
 }
 
-final class LocationCell: UITableViewCell, Reusable {
+final class LocationSearchResultCell: UITableViewCell, Reusable {
     // MARK: - Properties
+    var placemark: MKPlacemark? {
+        didSet {
+            headlineLabel.text = placemark?.name
+            subheadlineLabel.text = placemark?.address
+        }
+    }
+    
     private lazy var mainStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
             headlineLabel,
@@ -25,14 +33,12 @@ final class LocationCell: UITableViewCell, Reusable {
     
     private lazy var headlineLabel: UILabel = {
         let label = UILabel()
-        label.text = "Headline"
         label.font = .set(size: .headline, weight: .semibold)
         return label
     }()
     
     private lazy var subheadlineLabel: UILabel = {
         let label = UILabel()
-        label.text = "Subheadline"
         label.font = .set(size: .subheadline, weight: .regular)
         label.textColor = .secondaryLabel
         return label
@@ -51,7 +57,7 @@ final class LocationCell: UITableViewCell, Reusable {
     }
 }
 
-private extension LocationCell {
+private extension LocationSearchResultCell {
     func setupUI() {
         addSubview(mainStack)
     }

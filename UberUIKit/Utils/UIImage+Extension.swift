@@ -18,9 +18,11 @@ extension UIImage {
             static let fullName = UIImage(systemName: "person")
         }
         
-        static let leftArrow = UIImage(systemName: "arrow.left")
+        static let backArrow = UIImage(systemName: "arrow.left")
         
         static let car = UIImage(systemName: "car.side.fill")
+        
+        static let hamburger = UIImage(systemName: "line.3.horizontal")
     }
     
     func style(color: UIColor = .colorSchemeForegroundColor, size: UIFont.TextStyle, weight: UIFont.Weight) -> UIImage {

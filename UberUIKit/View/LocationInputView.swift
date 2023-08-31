@@ -8,7 +8,8 @@
 import UIKit
 
 protocol LocationInputViewDelegate: AnyObject {
-    func dismissView()
+    func dismiss()
+    func executeSearch(query: String)
 }
 
 private enum Constants {
@@ -22,7 +23,7 @@ final class LocationInputView: UIView {
     
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
-        let image = SFSymbol.leftArrow?
+        let image = SFSymbol.backArrow?
             .style(size: .headline, weight: .bold)
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
@@ -69,6 +70,7 @@ final class LocationInputView: UIView {
     
     private lazy var destinationLocationTextField: UITextField = {
         let textField = UITextField()
+        textField.delegate = self
         textField.tintColor = .colorSchemeForegroundColor
         textField.placeholder = "Enter a Destination.."
         textField.backgroundColor = .systemGroupedBackground
@@ -100,7 +102,7 @@ final class LocationInputView: UIView {
     
     // MARK: - Selectors
     @objc private func dismissView() {
-        delegate?.dismissView()
+        delegate?.dismiss()
     }
 }
 
@@ -169,5 +171,16 @@ private extension LocationInputView {
             destinationLocationTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.edgePaddding),
             destinationLocationTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight)
         ])
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension LocationInputView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let query = textField.text else { return false }
+        
+        delegate?.executeSearch(query: query)
+        
+        return true
     }
 }
