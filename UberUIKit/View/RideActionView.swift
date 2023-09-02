@@ -124,9 +124,6 @@ final class RideActionView: UIView {
             view.widthAnchor.constraint(equalToConstant: Constants.screenWidth - (Constants.padding * 2))
         ])
         
-        print("[DEBUG] self.frame.width \(self.frame.width)")
-        print("[DEBUG] view.frame.width \(view.frame.width)")
-        
         return view
     }()
     

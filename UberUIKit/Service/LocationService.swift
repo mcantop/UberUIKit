@@ -9,16 +9,12 @@ import CoreLocation
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
-import GeoFirestore
 
 struct LocationService {
     static let shared = LocationService()
     
     private let service = Service()
-}
-
-// MARK: - Public API
-extension LocationService {
+    
     func updateUserLocation(user: User?, coordinate: CLLocationCoordinate2D?) async {
         guard var user,
               let coordinate else { return }
@@ -33,12 +29,15 @@ extension LocationService {
             print("[DEBUG] updateUserLocation error - \(error.localizedDescription)")
         }
     }
-    
+}
+
+// MARK: - Rider API
+extension LocationService {
     func loadNearbyDrivers(for location: CLLocation?, completion: @escaping ([User]) -> Void) {
         loadNearbyDrivers(location: location, distance: 1) { completion($0) }
     }
     
-    func uploadRide(pickupCoordinate: GeoPoint, destinationCoordinate: GeoPoint) {
+    func confirmRide(pickupCoordinate: GeoPoint, destinationCoordinate: GeoPoint) {
         guard let passengerId = Auth.auth().currentUser?.uid else { return }
         
         let ride = Ride(
@@ -50,8 +49,46 @@ extension LocationService {
         do {
             try ServiceConstants.ridesCollection.addDocument(from: ride)
         } catch {
-            print("[DEBUG] Error while uploading ride - \(error.localizedDescription)")
+            print("[DEBUG] confirmRide error - \(error.localizedDescription)")
         }
+    }
+    
+    func observeCurrentRideForRider(completion: @escaping(Ride) -> Void) {
+        guard let passengerId = Auth.auth().currentUser?.uid else { return }
+        
+        ServiceConstants.ridesCollection
+            .whereField("passengerId", isEqualTo: passengerId)
+            .addSnapshotListener { snapshot, error in
+                guard let ride = try? snapshot?.documents.first?.data(as: Ride.self) else { return }
+                
+                completion(ride)
+            }
+    }
+}
+
+// MARK: - Driver API
+extension LocationService {
+    func acceptRide(_ ride: Ride?, completion: @escaping() -> Void) {
+        guard var ride,
+              let driverId = Auth.auth().currentUser?.uid,
+              let rideId = ride.id else { return }
+        
+        ride.driverId = driverId
+        ride.state = .accepted
+        
+        try? ServiceConstants.ridesCollection.document(rideId).setData(from: ride)
+        
+        completion()
+    }
+    
+    func observeRides(completion: @escaping(Ride) -> Void) {
+        ServiceConstants.ridesCollection
+            .whereField("state", isEqualTo: 0) /// Looking for a requested state
+            .addSnapshotListener { snapshot, error in
+                guard let ride = try? snapshot?.documents.first?.data(as: Ride.self) else { return }
+                
+                completion(ride)
+            }
     }
 }
 
@@ -64,7 +101,7 @@ private extension LocationService {
         /// Converters
         let lat = 0.009
         let lon = 0.0001
-
+        
         let lowerLat = latitude - (lat * distance)
         let lowerLon = longitude - (lon * distance)
         
@@ -79,7 +116,7 @@ private extension LocationService {
             .whereField("location", isGreaterThan: lesserGeopoint)
             .whereField("location", isLessThan: greaterGeopoint)
             .whereField("accountType", isEqualTo: 1)
-                
+        
         query.addSnapshotListener { snapshot, _ in
             guard let snapshot else { return }
             completion(snapshot.documents.compactMap { try? $0.data(as: User.self) })

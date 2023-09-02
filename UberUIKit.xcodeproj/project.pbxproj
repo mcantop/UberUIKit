@@ -19,6 +19,7 @@
 		5233C4232A9BFCD100E8AD4D /* LocationSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4222A9BFCD100E8AD4D /* LocationSearchResultCell.swift */; };
 		5233C4252A9BFD9400E8AD4D /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4242A9BFD9400E8AD4D /* Reusable.swift */; };
 		5233C4272A9C24AC00E8AD4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4262A9C24AC00E8AD4D /* LocationManager.swift */; };
+		524EE3562AA3141B00D616F9 /* PickupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524EE3552AA3141B00D616F9 /* PickupController.swift */; };
 		525A1A892AA2BE1F00C853CD /* MKMapView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525A1A882AA2BE1F00C853CD /* MKMapView+Extension.swift */; };
 		525A1A8B2AA2D50600C853CD /* Ride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525A1A8A2AA2D50600C853CD /* Ride.swift */; };
 		5262C70E2A9FE0E90047B5D9 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */; };
@@ -61,6 +62,7 @@
 		5233C4222A9BFCD100E8AD4D /* LocationSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchResultCell.swift; sourceTree = "<group>"; };
 		5233C4242A9BFD9400E8AD4D /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		5233C4262A9C24AC00E8AD4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		524EE3552AA3141B00D616F9 /* PickupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupController.swift; sourceTree = "<group>"; };
 		525A1A882AA2BE1F00C853CD /* MKMapView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Extension.swift"; sourceTree = "<group>"; };
 		525A1A8A2AA2D50600C853CD /* Ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ride.swift; sourceTree = "<group>"; };
 		5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
@@ -143,8 +145,8 @@
 		52F82F092A894ADF00816E34 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				52F82F102A89530700816E34 /* UIView+Extension.swift */,
 				52F82F152A89581C00816E34 /* UIImage+Extension.swift */,
+				52F82F102A89530700816E34 /* UIView+Extension.swift */,
 				52F82F132A89538900816E34 /* UIColor+Extension.swift */,
 				52F82F222A8ABF1600816E34 /* UIFont+Extension.swift */,
 				5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */,
@@ -162,6 +164,7 @@
 				52F82F202A8AB89C00816E34 /* RegisterController.swift */,
 				5283C8E12A9A87AD000593DA /* HomeController.swift */,
 				5233C41C2A9B91A400E8AD4D /* LocationDeniedController.swift */,
+				524EE3552AA3141B00D616F9 /* PickupController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				52319C9E2A9E439500DF0A4D /* Service.swift in Sources */,
+				524EE3562AA3141B00D616F9 /* PickupController.swift in Sources */,
 				52F82F212A8AB89C00816E34 /* RegisterController.swift in Sources */,
 				5283C8E92A9AA6EE000593DA /* AuthServiceError.swift in Sources */,
 				5262C7102AA001E00047B5D9 /* MKPlacemark+Extension.swift in Sources */,

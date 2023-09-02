@@ -43,10 +43,7 @@ final class HomeController: UIViewController {
     private lazy var locationInputView = LocationInputView()
     private lazy var rideActionView = RideActionView()
     private lazy var tableView = UITableView()
-    private lazy var actionButton: UIButton = {
-        let button = UIButton(type: .system)
-        return button
-    }()
+    private lazy var actionButton = UIButton(type: .system)
     
     private var isUserLoggedIn: Bool {
         return Auth.auth().currentUser?.uid != nil
@@ -64,10 +61,20 @@ final class HomeController: UIViewController {
         }
     }
     
+    private var ride: Ride? {
+        didSet {
+            if isCurrentUserRider {
+                // TODO:
+            } else {
+                presentPickupView()
+            }
+        }
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
         if isUserLoggedIn {
             handleUserLoggedInFlow()
         } else {
@@ -102,6 +109,9 @@ extension HomeController: HomeControllerDelegate {
         loadUserData {
             if self.isCurrentUserRider {
                 self.loadNearbyDrivers()
+                self.observeCurrentRideForPassenger()
+            } else {
+                self.observeRides()
             }
             
             self.setupUI()
@@ -242,6 +252,16 @@ private extension HomeController {
         }
     }
     
+    func presentPickupView() {
+        guard let ride else { return }
+        
+        let controller = PickupController(ride: ride, locationService: locationService)
+        controller.modalPresentationStyle = .custom
+        controller.deleagte = self
+        
+        present(controller, animated: true)
+    }
+    
     func dismissLocationInputView(completion: @escaping() -> Void) {
         UIView.animate(withDuration: Constants.animationDuration) {
             self.locationInputView.alpha = .zero
@@ -275,7 +295,6 @@ private extension HomeController {
                             let driverAnnotation = annotation as? DriverAnnotation,
                             driverAnnotation.uid == driver.id
                         {
-                            print("[DEBUG] Updating annotation for Driver - \(driver.fullName)")
                             driverAnnotation.updateAnnotation(withNewCoordinate: coordinate)
                             return true
                         }
@@ -286,6 +305,22 @@ private extension HomeController {
                 if !isAnnotationVisible {
                     self.mapView.addAnnotation(annotation)
                 }
+            }
+        }
+    }
+    
+    func observeRides() {
+        locationService.observeRides { ride in
+            self.ride = ride
+        }
+    }
+    
+    func observeCurrentRideForPassenger() {
+        locationService.observeCurrentRideForRider { ride in
+            self.ride = ride
+            
+            if ride.state == .accepted {
+                self.showLoadingView(false)
             }
         }
     }
@@ -400,13 +435,25 @@ extension HomeController: RideActionViewDelegate {
               let destinationLatitude = rideActionView.placemark?.coordinate.latitude,
               let destinationLongitude = rideActionView.placemark?.coordinate.longitude else { return }
         
+        showLoadingView(true, message: "Finding you a perfect ride..")
+        
         let pickupCoordinate = GeoPoint(latitude: pickupLatitude, longitude: pickupLongitude)
         let destinationCoordinate = GeoPoint(latitude: destinationLatitude, longitude: destinationLongitude)
         
-        locationService.uploadRide(
+        locationService.confirmRide(
             pickupCoordinate: pickupCoordinate,
             destinationCoordinate: destinationCoordinate
         )
+        
+        showRideActionView(false)
+    }
+}
+
+// MARK: - PickupControllerDelegate
+extension HomeController: PickupControllerDelegate {
+    func didAcceptRide(_ ride: Ride) {
+        self.ride = ride
+        self.dismiss(animated: true)
     }
 }
 

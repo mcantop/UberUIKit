@@ -23,9 +23,7 @@ struct Service {
 extension Service {
     func uploadUserData(_ user: User) async throws {
         do {
-            guard let userEncoded = try? Firestore.Encoder().encode(user) else { return }
-            
-            try await ServiceConstants.usersCollection.document(user.id).setData(userEncoded)
+            try ServiceConstants.usersCollection.document(user.id).setData(from: user)
         } catch {
             throw error
         }
