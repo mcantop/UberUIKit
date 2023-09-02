@@ -23,8 +23,10 @@ private enum Constants {
     static let animationDuration = 0.5
     static let elementVisible = 1.0
     static let locationInputActivationViewHeight = 50.0
-    static let locationInputViewHeight: CGFloat = 200
+    static let locationInputViewHeight = 200.0
     static let locationCellHeight = 60.0
+    static let rideActionViewHeight = 300.0
+    static let actionButtonImagePadding = 8.0
 }
 
 final class HomeController: UIViewController {
@@ -39,6 +41,7 @@ final class HomeController: UIViewController {
     
     private lazy var locationInputActivationView = LocationInputActivationView()
     private lazy var locationInputView = LocationInputView()
+    private lazy var rideActionView = RideActionView()
     private lazy var tableView = UITableView()
     private lazy var actionButton: UIButton = {
         let button = UIButton(type: .system)
@@ -76,7 +79,9 @@ final class HomeController: UIViewController {
         let userAnnotation = mapView.annotations.compactMap { $0 as? MKUserLocation }
         mapView.showAnnotations(userAnnotation, animated: true)
         
-        dismiss()
+        dismissLocationInputView()
+        
+        showRideActionView(false)
     }
     
     @objc private func handleHamburgerTapped() {
@@ -105,6 +110,7 @@ private extension HomeController {
         setupActionButton()
         setupLocationInputActivationView()
         setupTableView()
+        setupRideActionView()
     }
     
     func setupMapView() {
@@ -165,13 +171,42 @@ private extension HomeController {
         NSLayoutConstraint.activate([
             actionButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             actionButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            actionButton.heightAnchor.constraint(equalToConstant: Constants.locationInputActivationViewHeight)
         ])
+    }
+    
+    func setupRideActionView() {
+        view.addSubview(rideActionView)
+        
+        rideActionView.frame = CGRect(
+            x: 0,
+            y: view.frame.height,
+            width: view.frame.width,
+            height: Constants.rideActionViewHeight
+        )
+    }
+    
+    func showRideActionView(_ show: Bool) {
+        UIView.animate(withDuration: Constants.animationDuration) {
+            self.rideActionView.frame.origin.y = show
+            ? self.view.frame.height - Constants.rideActionViewHeight
+            : self.view.frame.height
+        }
     }
     
     func styleActionButton(to type: ActionButtonType) {
         let image = (type == .hamburger ? SFSymbol.hamburger : SFSymbol.backArrow)?
             .style(size: .headline, weight: .semibold)
-        actionButton.setImage(image, for: .normal)
+
+        var configuration: UIButton.Configuration = .filled()
+        configuration.image = image
+        configuration.imagePadding = Constants.actionButtonImagePadding
+        configuration.baseBackgroundColor = .colorSchemeBackgroundColor
+        configuration.background.cornerRadius = 0
+        
+        actionButton.configuration = configuration
+        actionButton.layer.cornerRadius = 0
+        actionButton.addShadow()
 
         switch type {
         case .hamburger:
@@ -195,7 +230,7 @@ private extension HomeController {
         }
     }
     
-    func dismissAfterSelectingAddress(completion: @escaping() -> Void) {
+    func dismissLocationInputView(completion: @escaping() -> Void) {
         UIView.animate(withDuration: Constants.animationDuration) {
             self.locationInputView.alpha = .zero
             self.tableView.frame.origin.y = self.view.frame.height
@@ -236,8 +271,6 @@ private extension HomeController {
                 
                 if !isAnnotationVisible {
                     self.mapView.addAnnotation(annotation)
-                } else {
-                    
                 }
             }
         }
@@ -334,7 +367,7 @@ extension HomeController: LocationInputViewDelegate {
         }
     }
     
-    func dismiss() {
+    func dismissLocationInputView() {
         UIView.animate(withDuration: Constants.animationDuration) {
             self.tableView.frame.origin.y = self.view.frame.height
             self.locationInputView.alpha = .zero
@@ -378,16 +411,16 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             await self.generatePolyline(toDestination: destination)
         }
         
-        dismissAfterSelectingAddress {
+        dismissLocationInputView {
             let annotation = MKPointAnnotation()
             annotation.coordinate = placemark.coordinate
-
             self.mapView.addAnnotation(annotation)
             self.mapView.selectAnnotation(annotation, animated: true)
             
             let annotations = self.mapView.annotations.filter { !$0.isKind(of: DriverAnnotation.self) }
-            
-            self.mapView.showAnnotations(annotations, animated: true)
+            self.mapView.zoomToFit(annotation: annotations, rideActionViewHeight: Constants.rideActionViewHeight)
+            self.showRideActionView(true)
+            self.rideActionView.placemark = placemark
         }
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol LocationInputViewDelegate: AnyObject {
-    func dismiss()
+    func dismissLocationInputView()
     func executeSearch(query: String)
 }
 
@@ -102,7 +102,7 @@ final class LocationInputView: UIView {
     
     // MARK: - Selectors
     @objc private func dismissView() {
-        delegate?.dismiss()
+        delegate?.dismissLocationInputView()
     }
 }
 
