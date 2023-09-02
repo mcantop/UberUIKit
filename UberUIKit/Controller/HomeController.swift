@@ -52,10 +52,14 @@ final class HomeController: UIViewController {
         return Auth.auth().currentUser?.uid != nil
     }
     
+    private var isCurrentUserRider: Bool {
+        return user?.accountType == .rider
+    }
+    
     private var user: User? {
         didSet {
             locationInputView.setFullNameLabel(user?.fullName)
-
+            
             updateUserLocation()
         }
     }
@@ -63,7 +67,7 @@ final class HomeController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         if isUserLoggedIn {
             handleUserLoggedInFlow()
         } else {
@@ -73,7 +77,7 @@ final class HomeController: UIViewController {
     
     @objc private func handleBackArrowTapped() {
         removeAnnotationsAndPolyline()
-                
+        
         styleActionButton(to: .hamburger)
         
         let userAnnotation = mapView.annotations.compactMap { $0 as? MKUserLocation }
@@ -95,9 +99,13 @@ extension HomeController: HomeControllerDelegate {
         locationManager = LocationManager.shared
         locationManager?.delegate = self
         
-        setupUI()
-        loadUserData()
-        loadNearbyDrivers()
+        loadUserData {
+            if self.isCurrentUserRider {
+                self.loadNearbyDrivers()
+            }
+            
+            self.setupUI()
+        }
     }
 }
 
@@ -108,7 +116,11 @@ private extension HomeController {
         
         setupMapView()
         setupActionButton()
-        setupLocationInputActivationView()
+                
+        if isCurrentUserRider {
+            setupLocationInputActivationView()
+        }
+        
         setupTableView()
         setupRideActionView()
     }
@@ -123,8 +135,6 @@ private extension HomeController {
     }
     
     func setupLocationInputActivationView() {
-        styleActionButton(to: .hamburger)
-        
         view.addSubview(locationInputActivationView)
         
         locationInputActivationView.delegate = self
@@ -141,7 +151,6 @@ private extension HomeController {
             locationInputActivationView.topAnchor.constraint(equalTo: actionButton.bottomAnchor, constant: 16),
             locationInputActivationView.widthAnchor.constraint(equalToConstant: view.frame.width - 32),
             locationInputActivationView.heightAnchor.constraint(equalToConstant: Constants.locationInputActivationViewHeight),
-            
         ])
     }
     
@@ -164,6 +173,8 @@ private extension HomeController {
     }
     
     func setupActionButton() {
+        styleActionButton(to: .hamburger)
+        
         view.addSubview(actionButton)
         
         actionButton.translatesAutoresizingMaskIntoConstraints = false
@@ -177,6 +188,7 @@ private extension HomeController {
     
     func setupRideActionView() {
         view.addSubview(rideActionView)
+        rideActionView.deleage = self
         
         rideActionView.frame = CGRect(
             x: 0,
@@ -197,7 +209,7 @@ private extension HomeController {
     func styleActionButton(to type: ActionButtonType) {
         let image = (type == .hamburger ? SFSymbol.hamburger : SFSymbol.backArrow)?
             .style(size: .headline, weight: .semibold)
-
+        
         var configuration: UIButton.Configuration = .filled()
         configuration.image = image
         configuration.imagePadding = Constants.actionButtonImagePadding
@@ -207,7 +219,7 @@ private extension HomeController {
         actionButton.configuration = configuration
         actionButton.layer.cornerRadius = 0
         actionButton.addShadow()
-
+        
         switch type {
         case .hamburger:
             actionButton.removeTarget(self, action: #selector(handleBackArrowTapped), for: .touchUpInside)
@@ -236,14 +248,16 @@ private extension HomeController {
             self.tableView.frame.origin.y = self.view.frame.height
         } completion: { _ in
             self.locationInputView.removeFromSuperview() /// For better performance, because we addSubview every time func is ran
-
+            
             completion()
         }
     }
     
-    func loadUserData() {
+    func loadUserData(completion: @escaping() -> Void) {
         Task {
             user = try await service.loadUserData()
+            
+            completion()
         }
     }
     
@@ -378,6 +392,24 @@ extension HomeController: LocationInputViewDelegate {
     }
 }
 
+// MARK: - RideActionViewDelegate
+extension HomeController: RideActionViewDelegate {
+    func uploadRide() {
+        guard let pickupLatitude = locationManager?.location?.coordinate.latitude,
+              let pickupLongitude = locationManager?.location?.coordinate.longitude,
+              let destinationLatitude = rideActionView.placemark?.coordinate.latitude,
+              let destinationLongitude = rideActionView.placemark?.coordinate.longitude else { return }
+        
+        let pickupCoordinate = GeoPoint(latitude: pickupLatitude, longitude: pickupLongitude)
+        let destinationCoordinate = GeoPoint(latitude: destinationLatitude, longitude: destinationLongitude)
+        
+        locationService.uploadRide(
+            pickupCoordinate: pickupCoordinate,
+            destinationCoordinate: destinationCoordinate
+        )
+    }
+}
+
 // MARK: - UITableViewDelegate && UITableViewDataSource
 extension HomeController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -403,7 +435,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         styleActionButton(to: .arrow)
-                
+        
         let placemark = self.searchResults[indexPath.row]
         let destination = MKMapItem(placemark: placemark)
         
@@ -456,7 +488,7 @@ extension HomeController: LocationManagerDelegate {
     
     func updateUserLocation() {
         Task {
-             await locationService.updateUserLocation(
+            await locationService.updateUserLocation(
                 user: user,
                 coordinate: locationManager?.location?.coordinate
             )

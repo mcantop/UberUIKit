@@ -6,6 +6,7 @@
 //
 
 import CoreLocation
+import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import GeoFirestore
@@ -35,6 +36,22 @@ extension LocationService {
     
     func loadNearbyDrivers(for location: CLLocation?, completion: @escaping ([User]) -> Void) {
         loadNearbyDrivers(location: location, distance: 1) { completion($0) }
+    }
+    
+    func uploadRide(pickupCoordinate: GeoPoint, destinationCoordinate: GeoPoint) {
+        guard let passengerId = Auth.auth().currentUser?.uid else { return }
+        
+        let ride = Ride(
+            passengerId: passengerId,
+            pickupCoordinate: pickupCoordinate,
+            destinationCoordinate: destinationCoordinate
+        )
+        
+        do {
+            try ServiceConstants.ridesCollection.addDocument(from: ride)
+        } catch {
+            print("[DEBUG] Error while uploading ride - \(error.localizedDescription)")
+        }
     }
 }
 

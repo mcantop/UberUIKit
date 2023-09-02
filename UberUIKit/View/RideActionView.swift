@@ -8,6 +8,10 @@
 import UIKit
 import MapKit
 
+protocol RideActionViewDelegate: AnyObject {
+    func uploadRide()
+}
+
 private enum Constants {
     static let xCircleSize = 60.0
     static let screenWidth = UIScreen.main.bounds.width
@@ -16,6 +20,8 @@ private enum Constants {
 
 final class RideActionView: UIView {
     // MARK: - Properties
+    weak var deleage: RideActionViewDelegate?
+    
     var placemark: MKPlacemark? {
         didSet {
             titleLabel.text = placemark?.name
@@ -151,7 +157,7 @@ final class RideActionView: UIView {
     
     // MARK: - Selectors
     @objc private func handleConfirmTap() {
-        print("[DEBUG] 123")
+        deleage?.uploadRide()
     }
 }
 

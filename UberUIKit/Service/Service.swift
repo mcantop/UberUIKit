@@ -12,6 +12,7 @@ import FirebaseFirestoreSwift
 
 enum ServiceConstants {
     static let usersCollection = Firestore.firestore().collection("users")
+    static let ridesCollection = Firestore.firestore().collection("rides")
 }
 
 struct Service {
