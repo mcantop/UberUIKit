@@ -22,6 +22,7 @@ struct Ride: Codable {
     let passengerId: String
     let pickupCoordinate: GeoPoint
     let destinationCoordinate: GeoPoint
+    let timestamp: Timestamp
     
     var state: RideState = .requested
     var driverId: String? = nil

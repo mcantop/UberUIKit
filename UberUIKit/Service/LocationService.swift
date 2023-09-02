@@ -24,7 +24,6 @@ struct LocationService {
         
         do {
             try await service.uploadUserData(user)
-            print("[DEBUG] Updated user location")
         } catch {
             print("[DEBUG] updateUserLocation error - \(error.localizedDescription)")
         }
@@ -37,13 +36,14 @@ extension LocationService {
         loadNearbyDrivers(location: location, distance: 1) { completion($0) }
     }
     
-    func confirmRide(pickupCoordinate: GeoPoint, destinationCoordinate: GeoPoint) {
-        guard let passengerId = Auth.auth().currentUser?.uid else { return }
+    func confirmRide(pickupCoordinate: GeoPoint, destinationCoordinate: GeoPoint) -> Ride? {
+        guard let passengerId = Auth.auth().currentUser?.uid else { return nil }
         
         let ride = Ride(
             passengerId: passengerId,
             pickupCoordinate: pickupCoordinate,
-            destinationCoordinate: destinationCoordinate
+            destinationCoordinate: destinationCoordinate,
+            timestamp: Timestamp(date: .now)
         )
         
         do {
@@ -51,16 +51,19 @@ extension LocationService {
         } catch {
             print("[DEBUG] confirmRide error - \(error.localizedDescription)")
         }
+        
+        return ride
     }
     
-    func observeCurrentRideForRider(completion: @escaping(Ride) -> Void) {
+    func observeCurrentRideForRider(_ ride: Ride, completion: @escaping(Ride) -> Void) {
         guard let passengerId = Auth.auth().currentUser?.uid else { return }
         
         ServiceConstants.ridesCollection
+            .whereField("timestamp", isEqualTo: ride.timestamp)
             .whereField("passengerId", isEqualTo: passengerId)
             .addSnapshotListener { snapshot, error in
                 guard let ride = try? snapshot?.documents.first?.data(as: Ride.self) else { return }
-                
+                                
                 completion(ride)
             }
     }

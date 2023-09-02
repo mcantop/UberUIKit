@@ -109,7 +109,6 @@ extension HomeController: HomeControllerDelegate {
         loadUserData {
             if self.isCurrentUserRider {
                 self.loadNearbyDrivers()
-                self.observeCurrentRideForPassenger()
             } else {
                 self.observeRides()
             }
@@ -315,16 +314,6 @@ private extension HomeController {
         }
     }
     
-    func observeCurrentRideForPassenger() {
-        locationService.observeCurrentRideForRider { ride in
-            self.ride = ride
-            
-            if ride.state == .accepted {
-                self.showLoadingView(false)
-            }
-        }
-    }
-    
     func logout() {
         try? Auth.auth().signOut()
         
@@ -440,10 +429,20 @@ extension HomeController: RideActionViewDelegate {
         let pickupCoordinate = GeoPoint(latitude: pickupLatitude, longitude: pickupLongitude)
         let destinationCoordinate = GeoPoint(latitude: destinationLatitude, longitude: destinationLongitude)
         
-        locationService.confirmRide(
+        guard let ride = locationService.confirmRide(
             pickupCoordinate: pickupCoordinate,
             destinationCoordinate: destinationCoordinate
-        )
+        ) else { return }
+        
+        locationService.observeCurrentRideForRider(ride) { ride in
+            self.ride = ride
+            
+            print("[DEBUG] State \(ride.state)")
+            
+            if ride.state == .accepted {
+                self.showLoadingView(false)
+            }
+        }
         
         showRideActionView(false)
     }

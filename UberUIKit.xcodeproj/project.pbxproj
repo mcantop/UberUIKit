@@ -67,7 +67,7 @@
 		525A1A8A2AA2D50600C853CD /* Ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ride.swift; sourceTree = "<group>"; };
 		5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		5262C70F2AA001E00047B5D9 /* MKPlacemark+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlacemark+Extension.swift"; sourceTree = "<group>"; };
-		5267F2662AA1323D0009012D /* UberUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5267F2662AA1323D0009012D /* UberUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = UberUIKit.app; path = "/Users/maciej/Documents/Documents/iOS Development/UIKit Projects/UberUIKit/build/Debug-iphoneos/UberUIKit.app"; sourceTree = "<absolute>"; };
 		5267F2672AA132600009012D /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		5283C8E12A9A87AD000593DA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		5283C8E62A9AA5AE000593DA /* AccountType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountType.swift; sourceTree = "<group>"; };
@@ -119,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				52F82EF42A89424A00816E34 /* UberUIKit */,
-				5267F2662AA1323D0009012D /* UberUIKit.app */,
 			);
 			sourceTree = "<group>";
 		};
