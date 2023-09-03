@@ -92,7 +92,7 @@ final class HomeController: UIViewController {
         
         dismissLocationInputView()
         
-        showRideActionView(false)
+        presentRideActionView(false)
     }
     
     @objc private func handleHamburgerTapped() {
@@ -197,7 +197,9 @@ private extension HomeController {
     
     func setupRideActionView() {
         view.addSubview(rideActionView)
+        
         rideActionView.deleage = self
+        rideActionView.userType = user?.accountType
         
         rideActionView.frame = CGRect(
             x: 0,
@@ -207,11 +209,19 @@ private extension HomeController {
         )
     }
     
-    func showRideActionView(_ show: Bool) {
+    func presentRideActionView(_ show: Bool, type: RideActionViewType? = nil, destination: MKPlacemark? = nil) {
         UIView.animate(withDuration: Constants.animationDuration) {
             self.rideActionView.frame.origin.y = show
             ? self.view.frame.height - Constants.rideActionViewHeight
             : self.view.frame.height
+        }
+        
+        if let type {
+            rideActionView.updateUI(withType: type)
+        }
+        
+        if let destination {
+            rideActionView.placemark = destination
         }
     }
     
@@ -418,7 +428,7 @@ extension HomeController: LocationInputViewDelegate {
 
 // MARK: - RideActionViewDelegate
 extension HomeController: RideActionViewDelegate {
-    func uploadRide() {
+    func confirmRide() {
         guard let pickupLatitude = locationManager?.location?.coordinate.latitude,
               let pickupLongitude = locationManager?.location?.coordinate.longitude,
               let destinationLatitude = rideActionView.placemark?.coordinate.latitude,
@@ -437,22 +447,39 @@ extension HomeController: RideActionViewDelegate {
         locationService.observeCurrentRideForRider(ride) { ride in
             self.ride = ride
             
-            print("[DEBUG] State \(ride.state)")
+            print("[DEBUG] Ride State - \(ride.state)")
             
             if ride.state == .accepted {
                 self.showLoadingView(false)
+                
+                self.presentRideActionView(true, type: .accepted)
             }
         }
         
-        showRideActionView(false)
+        presentRideActionView(false)
     }
 }
 
 // MARK: - PickupControllerDelegate
 extension HomeController: PickupControllerDelegate {
     func didAcceptRide(_ ride: Ride) {
-        self.ride = ride
-        self.dismiss(animated: true)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = ride.pickupCoordinate.asCoordinate2D
+        mapView.addAnnotation(annotation)
+        mapView.selectAnnotation(annotation, animated: true)
+        
+        Task {
+            let placemark = MKPlacemark(coordinate: ride.pickupCoordinate.asCoordinate2D)
+            let mapItem = MKMapItem(placemark: placemark)
+            
+            await self.generatePolyline(toDestination: mapItem)
+            
+            mapView.zoomToFit(annotation: mapView.annotations, rideActionViewHeight: Constants.rideActionViewHeight)
+            
+            dismiss(animated: true) {
+                self.presentRideActionView(true, type: .accepted)
+            }
+        }
     }
 }
 
@@ -497,8 +524,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             
             let annotations = self.mapView.annotations.filter { !$0.isKind(of: DriverAnnotation.self) }
             self.mapView.zoomToFit(annotation: annotations, rideActionViewHeight: Constants.rideActionViewHeight)
-            self.showRideActionView(true)
-            self.rideActionView.placemark = placemark
+            self.presentRideActionView(true, type: .requested, destination: placemark)
         }
     }
 }

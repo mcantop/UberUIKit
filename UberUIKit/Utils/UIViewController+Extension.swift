@@ -9,7 +9,7 @@ import UIKit
 import JGProgressHUD
 
 private enum Constants {
-    static let animationDuration = 1.0
+    static let animationDuration = 0.5
     static let elementVisible = 0.87
 }
 
@@ -31,19 +31,15 @@ extension UIViewController {
             let indicatorView = UIActivityIndicatorView(style: .large)
             indicatorView.center = loadingView.center
             indicatorView.startAnimating()
-            indicatorView.alpha = .zero
-            indicatorView.tag = 1
             
             let loadingMessage = UILabel()
             loadingMessage.text = message
             loadingMessage.font = .set(size: .headline, weight: .semibold)
             loadingMessage.translatesAutoresizingMaskIntoConstraints = false
-            loadingMessage.alpha = .zero
-            loadingMessage.tag = 1
             
             view.addSubview(loadingView)
-            view.addSubview(indicatorView)
-            view.addSubview(loadingMessage)
+            loadingView.addSubview(indicatorView)
+            loadingView.addSubview(loadingMessage)
             
             NSLayoutConstraint.activate([
                 loadingMessage.topAnchor.constraint(equalTo: indicatorView.bottomAnchor, constant: 16),

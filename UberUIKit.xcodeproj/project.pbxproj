@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		522CF1D52AA3F6BE00599EA6 /* GeoPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 522CF1D42AA3F6BE00599EA6 /* GeoPoint+Extension.swift */; };
 		52319C9C2A9E421500DF0A4D /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52319C9B2A9E421500DF0A4D /* LocationService.swift */; };
 		52319C9E2A9E439500DF0A4D /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52319C9D2A9E439500DF0A4D /* Service.swift */; };
 		5233C4142A9AA9C800E8AD4D /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */; };
@@ -51,6 +52,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		522CF1D32AA3CEEA00599EA6 /* UberUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberUIKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		522CF1D42AA3F6BE00599EA6 /* GeoPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GeoPoint+Extension.swift"; sourceTree = "<group>"; };
 		52319C9B2A9E421500DF0A4D /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		52319C9D2A9E439500DF0A4D /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		5233C4132A9AA9C800E8AD4D /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -67,7 +70,6 @@
 		525A1A8A2AA2D50600C853CD /* Ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ride.swift; sourceTree = "<group>"; };
 		5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		5262C70F2AA001E00047B5D9 /* MKPlacemark+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlacemark+Extension.swift"; sourceTree = "<group>"; };
-		5267F2662AA1323D0009012D /* UberUIKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = UberUIKit.app; path = "/Users/maciej/Documents/Documents/iOS Development/UIKit Projects/UberUIKit/build/Debug-iphoneos/UberUIKit.app"; sourceTree = "<absolute>"; };
 		5267F2672AA132600009012D /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		5283C8E12A9A87AD000593DA /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		5283C8E62A9AA5AE000593DA /* AccountType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountType.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				52F82EF42A89424A00816E34 /* UberUIKit */,
+				522CF1D32AA3CEEA00599EA6 /* UberUIKit.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -152,6 +155,7 @@
 				5262C70F2AA001E00047B5D9 /* MKPlacemark+Extension.swift */,
 				525A1A882AA2BE1F00C853CD /* MKMapView+Extension.swift */,
 				5233C4242A9BFD9400E8AD4D /* Reusable.swift */,
+				522CF1D42AA3F6BE00599EA6 /* GeoPoint+Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -238,7 +242,7 @@
 				5233C4182A9AAD6200E8AD4D /* JGProgressHUD */,
 			);
 			productName = UberUIKit;
-			productReference = 5267F2662AA1323D0009012D /* UberUIKit.app */;
+			productReference = 522CF1D32AA3CEEA00599EA6 /* UberUIKit.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -314,6 +318,7 @@
 				525A1A892AA2BE1F00C853CD /* MKMapView+Extension.swift in Sources */,
 				52319C9C2A9E421500DF0A4D /* LocationService.swift in Sources */,
 				52F82F1F2A8A3CA700816E34 /* UberTextFieldContainerView.swift in Sources */,
+				522CF1D52AA3F6BE00599EA6 /* GeoPoint+Extension.swift in Sources */,
 				5233C4252A9BFD9400E8AD4D /* Reusable.swift in Sources */,
 				5233C41D2A9B91A400E8AD4D /* LocationDeniedController.swift in Sources */,
 				5233C4232A9BFCD100E8AD4D /* LocationSearchResultCell.swift in Sources */,

@@ -9,7 +9,7 @@ import UIKit
 import MapKit
 
 protocol RideActionViewDelegate: AnyObject {
-    func uploadRide()
+    func confirmRide()
 }
 
 private enum Constants {
@@ -18,9 +18,17 @@ private enum Constants {
     static let padding = 16.0
 }
 
+enum RideActionViewType {
+    case requested
+    case inProgress
+    case accepted
+}
+
 final class RideActionView: UIView {
     // MARK: - Properties
     weak var deleage: RideActionViewDelegate?
+        
+    var userType: AccountType?
     
     var placemark: MKPlacemark? {
         didSet {
@@ -28,13 +36,13 @@ final class RideActionView: UIView {
             addressLabel.text = placemark?.address
         }
     }
-    
+        
     private lazy var mainStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
             textStack,
             xUberStack,
             seperatorView,
-            confirmButton
+            actionButton
         ])
         stack.axis = .vertical
         stack.spacing = 24
@@ -127,7 +135,7 @@ final class RideActionView: UIView {
         return view
     }()
     
-    private lazy var confirmButton: UIButton = {
+    private lazy var actionButton: UIButton = {
         let button = UberWideButton(type: .system)
         button.setTitle("Confirm UberX", for: .normal)
         button.applyStyling()
@@ -154,10 +162,28 @@ final class RideActionView: UIView {
     
     // MARK: - Selectors
     @objc private func handleConfirmTap() {
-        deleage?.uploadRide()
+        deleage?.confirmRide()
+    }
+}
+// MARK: - Public API
+extension RideActionView {
+    func updateUI(withType type: RideActionViewType) {
+        switch type {
+        case .requested:
+            actionButton.setTitle("Confirm UberX", for: .normal)
+        case .inProgress:
+            break
+        case .accepted:
+            if userType == .driver {
+                actionButton.setTitle("Get Directions", for: .normal)
+            } else {
+                actionButton.setTitle("Cancel", for: .normal)
+            }
+        }
     }
 }
 
+// MARK: - Private API
 private extension RideActionView {
     func setupUI() {
         addSubview(mainStack)
