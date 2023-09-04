@@ -21,22 +21,57 @@ private enum Constants {
 enum RideActionViewType {
     case requested
     case inProgress
-    case accepted
+    case accepted(AccountType?)
+    
+    var buttonText: String {
+        switch self {
+        case .requested:
+            return "Confirm UberX"
+        case .inProgress:
+            return "Cancel"
+        case .accepted(let accountType):
+            return accountType == .driver ? "Get Directions" : "Cancel"
+        }
+    }
+    
+    var titleText: String? {
+        switch self {
+        case .requested:
+            return nil
+        case .inProgress:
+            return nil
+        case .accepted(let accountType):
+            return accountType == .driver ? "En Route To Passenger" : "Driver En Route"
+        }
+    }
+    
+    var subheadlineText: String? {
+        switch self {
+        case .requested:
+            return nil
+        case .inProgress:
+            return nil
+        case .accepted(let accountType):
+            return accountType == .driver ? nil : "Your driver is about to pick you up soon.."
+        }
+    }
 }
 
 final class RideActionView: UIView {
     // MARK: - Properties
     weak var deleage: RideActionViewDelegate?
         
+    var placemark: MKPlacemark?
     var userType: AccountType?
+    var secondUserName: String?
     
-    var placemark: MKPlacemark? {
+    var actionType: RideActionViewType? {
         didSet {
-            titleLabel.text = placemark?.name
-            addressLabel.text = placemark?.address
+            guard let actionType else { return }
+            updateUI(withType: actionType)
         }
     }
-        
+    
     private lazy var mainStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
             textStack,
@@ -45,7 +80,7 @@ final class RideActionView: UIView {
             actionButton
         ])
         stack.axis = .vertical
-        stack.spacing = 24
+        stack.spacing = 16
         stack.alignment = .center
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
@@ -55,7 +90,7 @@ final class RideActionView: UIView {
     private lazy var textStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
             titleLabel,
-            addressLabel
+            subheadlineLabel
         ])
         stack.axis = .vertical
         stack.spacing = 4
@@ -65,15 +100,15 @@ final class RideActionView: UIView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .set(size: .headline, weight: .semibold)
-        label.text = "Test Title"
+        label.isHidden = label.text?.isEmpty == true
         label.textAlignment = .center
         return label
     }()
     
-    private lazy var addressLabel: UILabel = {
+    private lazy var subheadlineLabel: UILabel = {
         let label = UILabel()
         label.font = .set(size: .subheadline, weight: .thin)
-        label.text = "Test Address"
+        label.isHidden = label.text?.isEmpty == true
         label.textAlignment = .center
         return label
     }()
@@ -82,9 +117,10 @@ final class RideActionView: UIView {
     private lazy var xUberStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [
             xUberInfoView,
-            xUberInfoLabel
+            xUberSubLabel
         ])
         stack.axis = .vertical
+        stack.alignment = .center
         stack.spacing = 4
         return stack
     }()
@@ -94,18 +130,12 @@ final class RideActionView: UIView {
         view.backgroundColor = .colorSchemeForegroundColor
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = Constants.xCircleSize / 2
-        
-        let label = UILabel()
-        label.font = .set(size: .title1, weight: .medium)
-        label.textColor = .colorSchemeBackgroundColor
-        label.text = "X"
-        label.translatesAutoresizingMaskIntoConstraints = false
-                
-        view.addSubview(label)
+        view.addSubview(xUberHeadLabel)
         
         NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            xUberHeadLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            xUberHeadLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
             view.widthAnchor.constraint(equalToConstant: Constants.xCircleSize),
             view.heightAnchor.constraint(equalToConstant: Constants.xCircleSize),
         ])
@@ -113,7 +143,16 @@ final class RideActionView: UIView {
         return view
     }()
     
-    private lazy var xUberInfoLabel: UILabel = {
+    private lazy var xUberHeadLabel: UILabel = {
+        let label = UILabel()
+        label.font = .set(size: .title1, weight: .medium)
+        label.textColor = .colorSchemeBackgroundColor
+        label.text = "X"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var xUberSubLabel: UILabel = {
         let label = UILabel()
         label.font = .set(size: .headline, weight: .semibold)
         label.textAlignment = .center
@@ -139,7 +178,7 @@ final class RideActionView: UIView {
         let button = UberWideButton(type: .system)
         button.setTitle("Confirm UberX", for: .normal)
         button.applyStyling()
-        button.addTarget(self, action: #selector(handleConfirmTap), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleActionButtonTap), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
             button.widthAnchor.constraint(equalToConstant: Constants.screenWidth)
@@ -161,24 +200,20 @@ final class RideActionView: UIView {
     }
     
     // MARK: - Selectors
-    @objc private func handleConfirmTap() {
-        deleage?.confirmRide()
-    }
-}
-// MARK: - Public API
-extension RideActionView {
-    func updateUI(withType type: RideActionViewType) {
-        switch type {
+    @objc private func handleActionButtonTap() {
+        switch actionType {
         case .requested:
-            actionButton.setTitle("Confirm UberX", for: .normal)
+            deleage?.confirmRide()
         case .inProgress:
-            break
+            print("[DEBUG] Handle cancelling ride")
         case .accepted:
             if userType == .driver {
-                actionButton.setTitle("Get Directions", for: .normal)
+                print("[DEBUG] Get directions")
             } else {
-                actionButton.setTitle("Cancel", for: .normal)
+                print("[DEBUG] Handle cancelling ride")
             }
+        case .none:
+            break
         }
     }
 }
@@ -200,5 +235,24 @@ private extension RideActionView {
             mainStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Constants.padding),
             mainStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Constants.padding),
         ])
+    }
+    
+    func updateUI(withType type: RideActionViewType) {
+        titleLabel.text = type.titleText
+        subheadlineLabel.text = type.subheadlineText
+        actionButton.setTitle(type.buttonText, for: .normal)
+        
+        if case .requested = type {
+            titleLabel.text = placemark?.name
+            subheadlineLabel.text = placemark?.address
+        }
+        
+        guard case .accepted(_) = type else { return }
+        
+        if let firstLetter = secondUserName?.first {
+            xUberHeadLabel.text = String(firstLetter).uppercased()
+        }
+        
+        xUberSubLabel.text = secondUserName
     }
 }

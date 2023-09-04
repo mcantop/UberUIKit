@@ -25,7 +25,7 @@ private enum Constants {
     static let locationInputActivationViewHeight = 50.0
     static let locationInputViewHeight = 200.0
     static let locationCellHeight = 60.0
-    static let rideActionViewHeight = 300.0
+    static let rideActionViewHeight = 270.0
     static let actionButtonImagePadding = 8.0
 }
 
@@ -216,12 +216,12 @@ private extension HomeController {
             : self.view.frame.height
         }
         
-        if let type {
-            rideActionView.updateUI(withType: type)
-        }
-        
         if let destination {
             rideActionView.placemark = destination
+        }
+        
+        if let type {
+            rideActionView.actionType = type
         }
     }
     
@@ -284,7 +284,7 @@ private extension HomeController {
     
     func loadUserData(completion: @escaping() -> Void) {
         Task {
-            user = try await service.loadUserData()
+            user = try await service.loadCurrentUserData()
             
             completion()
         }
@@ -449,10 +449,20 @@ extension HomeController: RideActionViewDelegate {
             
             print("[DEBUG] Ride State - \(ride.state)")
             
-            if ride.state == .accepted {
-                self.showLoadingView(false)
+            if let driverId = ride.driverId, self.rideActionView.secondUserName == nil {
+                print("[DEBUG] Driver found - loading his user name...")
                 
-                self.presentRideActionView(true, type: .accepted)
+                Task {
+                    let driver = try? await self.service.loadUserData(uid: driverId)
+                    
+                    self.rideActionView.secondUserName = driver?.fullName
+                    
+                    if ride.state == .accepted {
+                        self.showLoadingView(false)
+                        
+                        self.presentRideActionView(true, type: .accepted(self.user?.accountType))
+                    }
+                }
             }
         }
         
@@ -476,8 +486,11 @@ extension HomeController: PickupControllerDelegate {
             
             mapView.zoomToFit(annotation: mapView.annotations, rideActionViewHeight: Constants.rideActionViewHeight)
             
+            let rider = try? await service.loadUserData(uid: ride.passengerId)
+            rideActionView.secondUserName = rider?.fullName
+            
             dismiss(animated: true) {
-                self.presentRideActionView(true, type: .accepted)
+                self.presentRideActionView(true, type: .accepted(self.user?.accountType))
             }
         }
     }

@@ -29,9 +29,21 @@ extension Service {
         }
     }
     
-    func loadUserData() async throws -> User? {
+    func loadCurrentUserData() async throws -> User? {
         do {
             guard let uid = Auth.auth().currentUser?.uid else { return nil }
+            
+            let snapshot = try await ServiceConstants.usersCollection.document(uid).getDocument()
+            let user = try snapshot.data(as: User.self)
+            return user
+        } catch {
+            throw error
+        }
+    }
+    
+    func loadUserData(uid: String?) async throws -> User? {
+        do {
+            guard let uid else { return nil }
             
             let snapshot = try await ServiceConstants.usersCollection.document(uid).getDocument()
             let user = try snapshot.data(as: User.self)
