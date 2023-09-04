@@ -111,7 +111,7 @@ final class LoginController: UIViewController {
             } catch {
                 await UberLoadingIndicator.displaFail()
                 
-                presentErrorAlert(error)
+                presentAlert(error: error)
             }
         }
     }

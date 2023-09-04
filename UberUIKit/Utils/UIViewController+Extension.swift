@@ -14,13 +14,10 @@ private enum Constants {
 }
 
 extension UIViewController {
-    func presentErrorAlert(_ error: Error) {
-        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Close", style: .default))
-        present(alert, animated: true)
-    }
-    
     func presentAlert(error: Error? = nil, title: String? = nil, message: String? = nil) {
+        let isError = error != nil
+        let title = isError ? "Error" : title
+        let message = isError ? error?.localizedDescription : message
         
         
         let alert = UIAlertController(

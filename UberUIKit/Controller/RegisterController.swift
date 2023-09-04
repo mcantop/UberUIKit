@@ -147,7 +147,7 @@ final class RegisterController: UIViewController {
             } catch {
                 await UberLoadingIndicator.displaFail()
                 
-                presentErrorAlert(error)
+                presentAlert(error: error)
             }
         }
     }
