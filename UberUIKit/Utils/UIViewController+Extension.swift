@@ -20,6 +20,20 @@ extension UIViewController {
         present(alert, animated: true)
     }
     
+    func presentAlert(error: Error? = nil, title: String? = nil, message: String? = nil) {
+        
+        
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Close", style: .default))
+        
+        present(alert, animated: true)
+    }
+    
     func showLoadingView(_ show: Bool, message: String? = nil) {
         if show {
             let loadingView = UIView()

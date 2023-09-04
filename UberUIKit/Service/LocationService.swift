@@ -67,6 +67,12 @@ extension LocationService {
                 completion(ride)
             }
     }
+    
+    func cancelRide(_ rideId: String?) async {
+        guard let rideId else { return }
+        
+        try? await ServiceConstants.ridesCollection.document(rideId).delete()
+    }
 }
 
 // MARK: - Driver API
@@ -91,6 +97,17 @@ extension LocationService {
                 guard let ride = try? snapshot?.documents.first?.data(as: Ride.self) else { return }
                 
                 completion(ride)
+            }
+    }
+    
+    func observeIfCurrentRideIsCancelled(_ rideId: String?, completion: @escaping() -> Void) {
+        guard let rideId else { return }
+        
+        ServiceConstants.ridesCollection.document(rideId)
+            .addSnapshotListener { snapshot, error in
+                guard snapshot?.exists == false else { return}
+                
+                completion()
             }
     }
 }

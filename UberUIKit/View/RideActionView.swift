@@ -10,6 +10,7 @@ import MapKit
 
 protocol RideActionViewDelegate: AnyObject {
     func confirmRide()
+    func cancelRide()
 }
 
 private enum Constants {
@@ -59,7 +60,7 @@ enum RideActionViewType {
 
 final class RideActionView: UIView {
     // MARK: - Properties
-    weak var deleage: RideActionViewDelegate?
+    weak var delegate: RideActionViewDelegate?
         
     var placemark: MKPlacemark?
     var userType: AccountType?
@@ -203,14 +204,14 @@ final class RideActionView: UIView {
     @objc private func handleActionButtonTap() {
         switch actionType {
         case .requested:
-            deleage?.confirmRide()
+            delegate?.confirmRide()
         case .inProgress:
-            print("[DEBUG] Handle cancelling ride")
+            delegate?.cancelRide()
         case .accepted:
             if userType == .driver {
                 print("[DEBUG] Get directions")
             } else {
-                print("[DEBUG] Handle cancelling ride")
+                delegate?.cancelRide()
             }
         case .none:
             break
@@ -245,6 +246,8 @@ private extension RideActionView {
         if case .requested = type {
             titleLabel.text = placemark?.name
             subheadlineLabel.text = placemark?.address
+            xUberHeadLabel.text = "X"
+            xUberSubLabel.text = "UberX"
         }
         
         guard case .accepted(_) = type else { return }

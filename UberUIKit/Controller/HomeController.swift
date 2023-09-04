@@ -27,6 +27,7 @@ private enum Constants {
     static let locationCellHeight = 60.0
     static let rideActionViewHeight = 270.0
     static let actionButtonImagePadding = 8.0
+    static let mapViewRangeInMeters = 1000.0
 }
 
 final class HomeController: UIViewController {
@@ -198,7 +199,7 @@ private extension HomeController {
     func setupRideActionView() {
         view.addSubview(rideActionView)
         
-        rideActionView.deleage = self
+        rideActionView.delegate = self
         rideActionView.userType = user?.accountType
         
         rideActionView.frame = CGRect(
@@ -373,6 +374,35 @@ private extension HomeController {
             }
         }
     }
+    
+    func updateUIAfterRideWasCancelled() {
+        presentRideActionView(false)
+        removeAnnotationsAndPolyline()
+        styleActionButton(to: .hamburger)
+        centerMapOnUserLocation()
+        presentAlert(
+            title: "Ride Cancelled",
+            message: "Your ride has been cancelled."
+        )
+        
+        if isCurrentUserRider {
+            setupLocationInputActivationView()
+        }
+        
+        rideActionView.secondUserName = nil
+    }
+    
+    func centerMapOnUserLocation() {
+        guard let coordinate = locationManager?.location?.coordinate else { return }
+        
+        let region = MKCoordinateRegion(
+            center: coordinate,
+            latitudinalMeters: Constants.mapViewRangeInMeters,
+            longitudinalMeters: Constants.mapViewRangeInMeters
+        )
+        
+        mapView.setRegion(region, animated: true)
+    }
 }
 
 // MARK: - LocationInputActivationViewDelegate
@@ -428,6 +458,14 @@ extension HomeController: LocationInputViewDelegate {
 
 // MARK: - RideActionViewDelegate
 extension HomeController: RideActionViewDelegate {
+    func cancelRide() {
+        Task {
+            await locationService.cancelRide(ride?.id)
+            
+            updateUIAfterRideWasCancelled()
+        }
+    }
+    
     func confirmRide() {
         guard let pickupLatitude = locationManager?.location?.coordinate.latitude,
               let pickupLongitude = locationManager?.location?.coordinate.longitude,
@@ -491,6 +529,10 @@ extension HomeController: PickupControllerDelegate {
             
             dismiss(animated: true) {
                 self.presentRideActionView(true, type: .accepted(self.user?.accountType))
+            }
+            
+            locationService.observeIfCurrentRideIsCancelled(ride.id) {
+                self.updateUIAfterRideWasCancelled()
             }
         }
     }
