@@ -10,6 +10,7 @@ import CoreLocation
 protocol LocationManagerDelegate: AnyObject {
     func presentLocationDeniedController()
     func updateUserLocation()
+    func didEnterRiderRegion()
 }
 
 final class LocationManager: NSObject {
@@ -32,7 +33,7 @@ final class LocationManager: NSObject {
     }
 }
 
-// MARK: - Public API
+// MARK: - CLLocationManagerDelegate
 extension LocationManager: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
@@ -49,6 +50,20 @@ extension LocationManager: CLLocationManagerDelegate {
         @unknown default:
             delegate?.presentLocationDeniedController()
         }
+    }
+    
+    func setCustomRegion(coordinate: CLLocationCoordinate2D) {
+        let region = CLCircularRegion(center: coordinate, radius: 25, identifier: "pickup")
+        manager.startMonitoring(for: region)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        print("[DEBUG] Did start monitoring for region")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        print("[DEBUG] Driver did enter passenger region")
+        delegate?.didEnterRiderRegion()
     }
 }
 

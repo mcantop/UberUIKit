@@ -47,6 +47,7 @@ extension Service {
             
             let snapshot = try await ServiceConstants.usersCollection.document(uid).getDocument()
             let user = try snapshot.data(as: User.self)
+            print("[DEBUG] Loaded user data..")
             return user
         } catch {
             throw error

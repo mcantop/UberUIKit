@@ -458,6 +458,10 @@ extension HomeController: LocationInputViewDelegate {
 
 // MARK: - RideActionViewDelegate
 extension HomeController: RideActionViewDelegate {
+    func pickupPassenger() {
+        print("[DEBUG] Pickup passenger action")
+    }
+    
     func cancelRide() {
         Task {
             await locationService.cancelRide(ride?.id)
@@ -486,21 +490,27 @@ extension HomeController: RideActionViewDelegate {
             self.ride = ride
             
             print("[DEBUG] Ride State - \(ride.state)")
+            guard let driverId = ride.driverId else { return }
             
-            if let driverId = ride.driverId, self.rideActionView.secondUserName == nil {
-                print("[DEBUG] Driver found - loading his user name...")
+            switch ride.state {
+            case .requested:
+                break
+            case .accepted:
+                guard self.rideActionView.secondUserName == nil else { break }
                 
                 Task {
                     let driver = try? await self.service.loadUserData(uid: driverId)
                     
                     self.rideActionView.secondUserName = driver?.fullName
-                    
-                    if ride.state == .accepted {
-                        self.showLoadingView(false)
-                        
-                        self.presentRideActionView(true, type: .accepted(self.user?.accountType))
-                    }
+                    self.showLoadingView(false)
+                    self.presentRideActionView(true, type: .accepted(self.user?.accountType))
                 }
+            case .driverArrived:
+                self.rideActionView.actionType = .driverArrived
+            case .inProgress:
+                break
+            case .completed:
+                break
             }
         }
         
@@ -512,9 +522,12 @@ extension HomeController: RideActionViewDelegate {
 extension HomeController: PickupControllerDelegate {
     func didAcceptRide(_ ride: Ride) {
         let annotation = MKPointAnnotation()
-        annotation.coordinate = ride.pickupCoordinate.asCoordinate2D
+        let pickupCoordinate = ride.pickupCoordinate.asCoordinate2D
+        annotation.coordinate = pickupCoordinate
         mapView.addAnnotation(annotation)
         mapView.selectAnnotation(annotation, animated: true)
+        
+        locationManager?.setCustomRegion(coordinate: pickupCoordinate)
         
         Task {
             let placemark = MKPlacemark(coordinate: ride.pickupCoordinate.asCoordinate2D)
@@ -586,6 +599,18 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - MKMapViewDelegate
 extension HomeController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        /// Update location only for the driver, so rider can see driver being updated
+        guard let user, user.accountType == .driver else { return }
+        
+        Task {
+            await locationService.updateUserLocation(
+                user: user,
+                coordinate: userLocation.location?.coordinate
+            )
+        }
+    }
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard let annotation = annotation as? DriverAnnotation else { return nil }
         
@@ -609,6 +634,16 @@ extension HomeController: MKMapViewDelegate {
 
 // MARK: -  LocationManagerDelegate
 extension HomeController: LocationManagerDelegate {
+    func didEnterRiderRegion() {
+        rideActionView.actionType = .pickupPassenger
+        
+        Task {
+            guard let rideId = ride?.id else { return }
+            
+            await locationService.updateRideState(tripId: rideId, toState: .driverArrived)
+        }
+    }
+    
     func presentLocationDeniedController() {
         navigationController?.pushViewController(LocationDeniedController(), animated: true)
     }

@@ -12,6 +12,7 @@ import FirebaseFirestoreSwift
 enum RideState: Int, Codable {
     case requested
     case accepted
+    case driverArrived
     case inProgress
     case completed
 }

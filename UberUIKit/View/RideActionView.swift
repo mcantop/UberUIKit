@@ -11,6 +11,7 @@ import MapKit
 protocol RideActionViewDelegate: AnyObject {
     func confirmRide()
     func cancelRide()
+    func pickupPassenger()
 }
 
 private enum Constants {
@@ -21,17 +22,23 @@ private enum Constants {
 
 enum RideActionViewType {
     case requested
-    case inProgress
     case accepted(AccountType?)
+    case pickupPassenger
+    case driverArrived
+    case inProgress
     
     var buttonText: String {
         switch self {
         case .requested:
             return "Confirm UberX"
-        case .inProgress:
-            return "Cancel"
         case .accepted(let accountType):
             return accountType == .driver ? "Get Directions" : "Cancel"
+        case .pickupPassenger:
+            return "Pickup Passenger"
+        case .inProgress:
+            return "Cancel"
+        case .driverArrived:
+            return "Cancel"
         }
     }
     
@@ -39,10 +46,14 @@ enum RideActionViewType {
         switch self {
         case .requested:
             return nil
-        case .inProgress:
-            return nil
         case .accepted(let accountType):
             return accountType == .driver ? "En Route To Passenger" : "Driver En Route"
+        case .pickupPassenger:
+            return "Arrived at Passenger Location"
+        case .inProgress:
+            return nil
+        case .driverArrived:
+            return "Driver arrived."
         }
     }
     
@@ -50,10 +61,14 @@ enum RideActionViewType {
         switch self {
         case .requested:
             return nil
-        case .inProgress:
-            return nil
         case .accepted(let accountType):
             return accountType == .driver ? nil : "Your driver is about to pick you up soon.."
+        case .pickupPassenger:
+            return nil
+        case .inProgress:
+            return nil
+        case .driverArrived:
+            return "Find your driver at destined location."
         }
     }
 }
@@ -205,7 +220,7 @@ final class RideActionView: UIView {
         switch actionType {
         case .requested:
             delegate?.confirmRide()
-        case .inProgress:
+        case .inProgress, .driverArrived:
             delegate?.cancelRide()
         case .accepted:
             if userType == .driver {
@@ -213,6 +228,8 @@ final class RideActionView: UIView {
             } else {
                 delegate?.cancelRide()
             }
+        case .pickupPassenger:
+            delegate?.pickupPassenger()
         case .none:
             break
         }
