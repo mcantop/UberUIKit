@@ -29,15 +29,15 @@ struct LocationService {
         }
     }
     
-    func updateRideState(tripId: String, toState state: RideState) async {
-        try? await ServiceConstants.ridesCollection.document(tripId).updateData(["state": state.rawValue])
+    func updateRideState(rideId: String, toState state: RideState) async {
+        try? await ServiceConstants.ridesCollection.document(rideId).updateData(["state": state.rawValue])
     }
 }
 
 // MARK: - Rider API
 extension LocationService {
-    func loadNearbyDrivers(for location: CLLocation?, completion: @escaping ([User]) -> Void) {
-        loadNearbyDrivers(location: location, distance: 1) { completion($0) }
+    func observeNearbyDrivers(for location: CLLocation?, completion: @escaping ([User]) -> Void) {
+        observeNearbyDrivers(location: location, distance: 1) { completion($0) }
     }
     
     func confirmRide(pickupCoordinate: GeoPoint, destinationCoordinate: GeoPoint) -> Ride? {
@@ -118,7 +118,7 @@ extension LocationService {
 
 // MARK: - Private API
 private extension LocationService {
-    func loadNearbyDrivers(location: CLLocation?, distance: Double, completion: @escaping ([User]) -> Void) {
+    func observeNearbyDrivers(location: CLLocation?, distance: Double, completion: @escaping ([User]) -> Void) {
         guard let latitude = location?.coordinate.latitude.magnitude,
               let longitude = location?.coordinate.longitude.magnitude else { return }
         

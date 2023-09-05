@@ -136,11 +136,9 @@ extension PickupController {
             latitudinalMeters: Constants.mapViewRangeInMeters,
             longitudinalMeters: Constants.mapViewRangeInMeters
         )
+        
         mapView.setRegion(region, animated: true)
         
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
-        mapView.addAnnotation(annotation)
-        mapView.selectAnnotation(annotation, animated: true)
+        self.mapView.addAndSelectAnnotation(forCoordinate: coordinate)
     }
 }

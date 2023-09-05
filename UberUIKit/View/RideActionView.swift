@@ -25,7 +25,7 @@ enum RideActionViewType {
     case accepted(AccountType?)
     case pickupPassenger
     case driverArrived
-    case inProgress
+    case inProgress(AccountType?)
     
     var buttonText: String {
         switch self {
@@ -35,8 +35,8 @@ enum RideActionViewType {
             return accountType == .driver ? "Get Directions" : "Cancel"
         case .pickupPassenger:
             return "Pickup Passenger"
-        case .inProgress:
-            return "Cancel"
+        case .inProgress(let accountType):
+            return accountType == .driver ? "Get Directions" : "Trip In Progress"
         case .driverArrived:
             return "Cancel"
         }
@@ -51,7 +51,7 @@ enum RideActionViewType {
         case .pickupPassenger:
             return "Arrived at Passenger Location"
         case .inProgress:
-            return nil
+            return "En Route To Destination"
         case .driverArrived:
             return "Driver arrived."
         }
@@ -65,8 +65,8 @@ enum RideActionViewType {
             return accountType == .driver ? nil : "Your driver is about to pick you up soon.."
         case .pickupPassenger:
             return nil
-        case .inProgress:
-            return nil
+        case .inProgress(let accountType):
+            return accountType == .driver ? "Don't forget about safety guidelines." : "Enjoy your ride!"
         case .driverArrived:
             return "Find your driver at destined location."
         }
@@ -220,14 +220,14 @@ final class RideActionView: UIView {
         switch actionType {
         case .requested:
             delegate?.confirmRide()
-        case .inProgress, .driverArrived:
-            delegate?.cancelRide()
-        case .accepted:
+        case .accepted, .inProgress:
             if userType == .driver {
                 print("[DEBUG] Get directions")
             } else {
                 delegate?.cancelRide()
             }
+        case .driverArrived:
+            delegate?.cancelRide()
         case .pickupPassenger:
             delegate?.pickupPassenger()
         case .none:
@@ -265,6 +265,12 @@ private extension RideActionView {
             subheadlineLabel.text = placemark?.address
             xUberHeadLabel.text = "X"
             xUberSubLabel.text = "UberX"
+        }
+        
+        if case .inProgress(let accountType) = type {
+            if accountType == .rider {
+                actionButton.isEnabled = false
+            }
         }
         
         guard case .accepted(_) = type else { return }
