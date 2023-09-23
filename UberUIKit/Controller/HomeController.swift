@@ -152,12 +152,6 @@ private extension HomeController {
         view.addSubview(locationInputActivationView)
         
         locationInputActivationView.delegate = self
-        locationInputActivationView.alpha = .zero
-        
-        UIView.animate(withDuration: Constants.initialAnimationDuration) {
-            self.locationInputActivationView.alpha = Constants.elementVisible
-        }
-        
         locationInputActivationView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -251,6 +245,14 @@ private extension HomeController {
         case .arrow:
             actionButton.removeTarget(self, action: #selector(handleHamburgerTapped), for: .touchUpInside)
             actionButton.addTarget(self, action: #selector(handleBackArrowTapped), for: .touchUpInside)
+        }
+    }
+    
+    func presentLocationInputActivationView(_ show: Bool) {
+        locationInputActivationView.alpha = show ? .zero : Constants.elementVisible
+        
+        UIView.animate(withDuration: Constants.initialAnimationDuration) {
+            self.locationInputActivationView.alpha = show ? Constants.elementVisible : .zero
         }
     }
     
@@ -388,6 +390,19 @@ private extension HomeController {
         mapView.addOverlay(polyline)
     }
     
+    func generateRoute(to coordinate: CLLocationCoordinate2D) {
+        mapView.addAndSelectAnnotation(forCoordinate: coordinate)
+        
+        let placemark = MKPlacemark(coordinate: coordinate)
+        let mapItem = MKMapItem(placemark: placemark)
+        
+        Task {
+            await generatePolyline(toDestination: mapItem)
+        }
+        
+        mapView.zoomToFit(annotation: mapView.annotations, rideActionViewHeight: Constants.rideActionViewHeight)
+    }
+    
     func removeAnnotationsAndPolyline() {
         mapView.annotations.forEach { annotation in
             if annotation is MKPointAnnotation {
@@ -413,7 +428,7 @@ private extension HomeController {
         )
         
         if isCurrentUserRider {
-            setupLocationInputActivationView()
+            presentLocationInputActivationView(true)
         }
         
         rideActionView.secondUserName = nil
@@ -502,7 +517,11 @@ extension HomeController: RideActionViewDelegate {
             
             mapView.addAndSelectAnnotation(forCoordinate: destinationCoordinate)
             
+            locationManager?.setCustomRegion(withType: .destination, coordinate: destinationCoordinate)
+            
             await generatePolyline(toDestination: mapItem)
+            
+            mapView.zoomToFit(annotation: mapView.annotations, rideActionViewHeight: Constants.rideActionViewHeight)
         }
     }
     
@@ -535,8 +554,9 @@ extension HomeController: RideActionViewDelegate {
         locationService.observeCurrentRideForRider(ride) { ride in
             self.ride = ride
             
-            print("[DEBUG] Ride State - \(ride.state)")
             guard let driverId = ride.driverId else { return }
+            
+            let userType = self.currentUserType
                         
             switch ride.state {
             case .requested:
@@ -551,18 +571,42 @@ extension HomeController: RideActionViewDelegate {
                     
                     self.rideActionView.secondUserName = driver?.fullName
                     self.showLoadingView(false)
-                    self.presentRideActionView(true, type: .accepted(self.user?.accountType))
+                    self.presentRideActionView(true, type: .accepted(userType))
                 }
             case .driverArrived:
                 self.rideActionView.actionType = .driverArrived
             case .inProgress:
-                self.rideActionView.actionType = .inProgress(self.currentUserType)
+                self.generateRoute(to: ride.destinationCoordinate.asCoordinate2D)
+                self.rideActionView.actionType = .inProgress(userType)
+            case .arrivedAtDestination:
+                self.zoomForCurrentRide()
+                self.rideActionView.actionType = .arrivedAtDestiation(userType)
             case .completed:
-                break
+                self.removeAnnotationsAndPolyline()
+                self.presentRideActionView(false)
+                self.centerMapOnUserLocation()
+                self.styleActionButton(to: .hamburger)
+                self.presentLocationInputActivationView(true)
+                self.presentAlert(
+                    title: "Ride completed",
+                    message: "We hope you enjoyed your trip with \(self.rideActionView.secondUserName ?? "Driver Name")"
+                )
             }
         }
         
         presentRideActionView(false)
+    }
+    
+    func dropOffPassenger() {
+        guard let rideId = ride?.id else { return }
+        
+        Task {
+            await locationService.updateRideState(rideId: rideId, toState: .completed)
+            
+            removeAnnotationsAndPolyline()
+            centerMapOnUserLocation()
+            presentRideActionView(false)
+        }
     }
 }
 
@@ -571,17 +615,10 @@ extension HomeController: PickupControllerDelegate {
     func didAcceptRide(_ ride: Ride) {
         let pickupCoordinate = ride.pickupCoordinate.asCoordinate2D
         
-        mapView.addAndSelectAnnotation(forCoordinate: pickupCoordinate)
-        
-        locationManager?.setCustomRegion(coordinate: pickupCoordinate)
+        locationManager?.setCustomRegion(withType: .pickup, coordinate: pickupCoordinate)
         
         Task {
-            let placemark = MKPlacemark(coordinate: ride.pickupCoordinate.asCoordinate2D)
-            let mapItem = MKMapItem(placemark: placemark)
-            
-            await self.generatePolyline(toDestination: mapItem)
-            
-            mapView.zoomToFit(annotation: mapView.annotations, rideActionViewHeight: Constants.rideActionViewHeight)
+            generateRoute(to: pickupCoordinate)
             
             let rider = try? await service.loadUserData(uid: ride.passengerId)
             rideActionView.secondUserName = rider?.fullName
@@ -677,10 +714,20 @@ extension HomeController: MKMapViewDelegate {
 
 // MARK: -  LocationManagerDelegate
 extension HomeController: LocationManagerDelegate {
-    func didEnterRiderRegion() {
+    func didEnterDestinationRegion() {
+        guard let rideId = ride?.id else { return }
+        
         Task {
-            guard let rideId = ride?.id else { return }
+            await locationService.updateRideState(rideId: rideId, toState: .arrivedAtDestination)
             
+            rideActionView.actionType = .arrivedAtDestiation(currentUserType)
+        }
+    }
+    
+    func didEnterPickupRegion() {
+        guard let rideId = ride?.id else { return }
+
+        Task {
             await locationService.updateRideState(rideId: rideId, toState: .driverArrived)
             
             rideActionView.actionType = .pickupPassenger

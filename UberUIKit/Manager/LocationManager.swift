@@ -10,7 +10,13 @@ import CoreLocation
 protocol LocationManagerDelegate: AnyObject {
     func presentLocationDeniedController()
     func updateUserLocation()
-    func didEnterRiderRegion()
+    func didEnterPickupRegion()
+    func didEnterDestinationRegion()
+}
+
+enum AnnotationType: String {
+    case pickup
+    case destination
 }
 
 final class LocationManager: NSObject {
@@ -52,18 +58,29 @@ extension LocationManager: CLLocationManagerDelegate {
         }
     }
     
-    func setCustomRegion(coordinate: CLLocationCoordinate2D) {
-        let region = CLCircularRegion(center: coordinate, radius: 25, identifier: "pickup")
+    func setCustomRegion(withType type: AnnotationType, coordinate: CLLocationCoordinate2D) {
+        let region = CLCircularRegion(center: coordinate, radius: 25, identifier: type.rawValue)
         manager.startMonitoring(for: region)
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-        print("[DEBUG] Did start monitoring for region")
+        if region.identifier == AnnotationType.pickup.rawValue {
+            print("[DEBUG] Did start monitoring pick up region - \(region)")
+        }
+        
+        if region.identifier == AnnotationType.destination.rawValue {
+            print("[DEBUG] Did start monitoring destination region - \(region)")
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        print("[DEBUG] Driver did enter passenger region")
-        delegate?.didEnterRiderRegion()
+        if region.identifier == AnnotationType.pickup.rawValue {
+            delegate?.didEnterPickupRegion()
+        }
+        
+        if region.identifier == AnnotationType.destination.rawValue {
+            delegate?.didEnterDestinationRegion()
+        }
     }
 }
 
@@ -72,19 +89,15 @@ private extension LocationManager {
     func enableLocationServices() {
         switch manager.authorizationStatus {
         case .notDetermined:
-            print("[DEBUG] Location Auth Status - Not Determined")
             manager.requestWhenInUseAuthorization()
         case .authorizedAlways:
-            print("[DEBUG] Location Auth Status - Auth Always")
             manager.startUpdatingLocation()
             manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         case .authorizedWhenInUse:
-            print("[DEBUG] Location Auth Status - Auth when In Use")
             manager.requestAlwaysAuthorization()
         case .restricted, .denied:
             fallthrough
         @unknown default:
-            print("[DEBUG] Wrong Location Auth Status")
             delegate?.presentLocationDeniedController()
         }
     }

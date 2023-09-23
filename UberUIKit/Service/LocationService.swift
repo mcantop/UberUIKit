@@ -37,7 +37,7 @@ struct LocationService {
 // MARK: - Rider API
 extension LocationService {
     func observeNearbyDrivers(for location: CLLocation?, completion: @escaping ([User]) -> Void) {
-        observeNearbyDrivers(location: location, distance: 1) { completion($0) }
+        observeNearbyDrivers(location: location, distance: 10) { completion($0) }
     }
     
     func confirmRide(pickupCoordinate: GeoPoint, destinationCoordinate: GeoPoint) -> Ride? {

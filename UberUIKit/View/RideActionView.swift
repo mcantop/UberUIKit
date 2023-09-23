@@ -12,6 +12,7 @@ protocol RideActionViewDelegate: AnyObject {
     func confirmRide()
     func cancelRide()
     func pickupPassenger()
+    func dropOffPassenger()
 }
 
 private enum Constants {
@@ -26,6 +27,7 @@ enum RideActionViewType {
     case pickupPassenger
     case driverArrived
     case inProgress(AccountType?)
+    case arrivedAtDestiation(AccountType?)
     
     var buttonText: String {
         switch self {
@@ -39,6 +41,8 @@ enum RideActionViewType {
             return accountType == .driver ? "Get Directions" : "Trip In Progress"
         case .driverArrived:
             return "Cancel"
+        case .arrivedAtDestiation(let accountType):
+            return accountType == .driver ? "Drop off passenger" : "Waiting for Drop Off.."
         }
     }
     
@@ -54,6 +58,8 @@ enum RideActionViewType {
             return "En Route To Destination"
         case .driverArrived:
             return "Driver arrived."
+        case .arrivedAtDestiation:
+            return "Arrived at destination."
         }
     }
     
@@ -69,6 +75,8 @@ enum RideActionViewType {
             return accountType == .driver ? "Don't forget about safety guidelines." : "Enjoy your ride!"
         case .driverArrived:
             return "Find your driver at destined location."
+        case .arrivedAtDestiation(let accountType):
+            return accountType == .driver ? "Drop off your passenger in a safe spot." : "Please wait until driver drops you off..."
         }
     }
 }
@@ -230,6 +238,8 @@ final class RideActionView: UIView {
             delegate?.cancelRide()
         case .pickupPassenger:
             delegate?.pickupPassenger()
+        case .arrivedAtDestiation:
+            delegate?.dropOffPassenger()
         case .none:
             break
         }
@@ -270,6 +280,12 @@ private extension RideActionView {
         if case .inProgress(let accountType) = type {
             if accountType == .rider {
                 actionButton.isEnabled = false
+            }
+        }
+        
+        if case .arrivedAtDestiation(let accountType) = type {
+            if accountType == .rider {
+                actionButton.isEnabled = true
             }
         }
         
