@@ -11,7 +11,6 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct AuthService {
-    // MARK: - Properties
     static let shared = AuthService()
     
     private let service = Service()
@@ -57,7 +56,7 @@ extension AuthService {
                 accountType: accountType
             )
             
-            try await service.uploadUserData(user)
+            await service.uploadUserData(user)
         } catch {
             throw error
         }

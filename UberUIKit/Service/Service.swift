@@ -21,12 +21,8 @@ struct Service {
 
 // MARK: - Public API
 extension Service {
-    func uploadUserData(_ user: User) async throws {
-        do {
-            try ServiceConstants.usersCollection.document(user.id).setData(from: user)
-        } catch {
-            throw error
-        }
+    func uploadUserData(_ user: User) async {
+        try? ServiceConstants.usersCollection.document(user.id).setData(from: user)
     }
     
     func loadCurrentUserData() async throws -> User? {

@@ -87,6 +87,7 @@ final class HomeController: UIViewController {
         }
     }
     
+    // MARK: - Selectors
     @objc private func handleBackArrowTapped() {
         removeAnnotationsAndPolyline()
         
@@ -105,25 +106,7 @@ final class HomeController: UIViewController {
     }
 }
 
-// MARK: - HomeControllerDelegate
-extension HomeController: HomeControllerDelegate {
-    func handleUserLoggedInFlow() {
-        locationManager = LocationManager.shared
-        locationManager?.delegate = self
-        
-        loadUserData {
-            if self.isCurrentUserRider {
-                self.observeNearbyDrivers()
-            } else {
-                self.observeRides()
-            }
-            
-            self.setupUI()
-        }
-    }
-}
-
-// MARK: - Private API
+// MARK: - Private UI API
 private extension HomeController {
     func setupUI() {
         navigationController?.isNavigationBarHidden = true
@@ -199,7 +182,6 @@ private extension HomeController {
         
         rideActionView.delegate = self
         rideActionView.userType = user?.accountType
-        
         rideActionView.frame = CGRect(
             x: 0,
             y: view.frame.height,
@@ -297,6 +279,15 @@ private extension HomeController {
         }
     }
     
+    func logout() {
+        try? Auth.auth().signOut()
+        
+        presentLoginView()
+    }
+}
+
+// MARK: - Private Passenger API
+private extension HomeController {
     func observeNearbyDrivers() {
         locationService.observeNearbyDrivers(for: locationManager?.location) { drivers in
             for driver in drivers {
@@ -347,17 +338,14 @@ private extension HomeController {
         
         mapView.zoomToFit(annotation: annotations, rideActionViewHeight: Constants.rideActionViewHeight)
     }
-    
+}
+
+// MARK: - Private Driver API
+private extension HomeController {
     func observeRides() {
         locationService.observeRides { ride in
             self.ride = ride
         }
-    }
-    
-    func logout() {
-        try? Auth.auth().signOut()
-        
-        presentLoginView()
     }
 }
 
@@ -512,16 +500,12 @@ extension HomeController: RideActionViewDelegate {
             removeAnnotationsAndPolyline()
             
             let destinationCoordinate = ride.destinationCoordinate.asCoordinate2D
-            let placemark = MKPlacemark(coordinate: destinationCoordinate)
-            let mapItem = MKMapItem(placemark: placemark)
             
             mapView.addAndSelectAnnotation(forCoordinate: destinationCoordinate)
             
             locationManager?.setCustomRegion(withType: .destination, coordinate: destinationCoordinate)
             
-            await generatePolyline(toDestination: mapItem)
-            
-            mapView.zoomToFit(annotation: mapView.annotations, rideActionViewHeight: Constants.rideActionViewHeight)
+            generateRoute(to: destinationCoordinate)
         }
     }
     
@@ -579,7 +563,7 @@ extension HomeController: RideActionViewDelegate {
                 self.generateRoute(to: ride.destinationCoordinate.asCoordinate2D)
                 self.rideActionView.actionType = .inProgress(userType)
             case .arrivedAtDestination:
-                self.zoomForCurrentRide()
+//                self.zoomForCurrentRide()
                 self.rideActionView.actionType = .arrivedAtDestiation(userType)
             case .completed:
                 self.removeAnnotationsAndPolyline()
@@ -661,11 +645,8 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
         styleActionButton(to: .arrow)
         
         let placemark = self.searchResults[indexPath.row]
-        let destination = MKMapItem(placemark: placemark)
-        
-        Task {
-            await self.generatePolyline(toDestination: destination)
-        }
+
+        generateRoute(to: placemark.coordinate)
         
         dismissLocationInputView {
             self.mapView.addAndSelectAnnotation(forCoordinate: placemark.coordinate)
@@ -709,6 +690,24 @@ extension HomeController: MKMapViewDelegate {
         }
         
         return MKOverlayRenderer()
+    }
+}
+
+// MARK: - HomeControllerDelegate
+extension HomeController: HomeControllerDelegate {
+    func handleUserLoggedInFlow() {
+        locationManager = LocationManager.shared
+        locationManager?.delegate = self
+        
+        loadUserData {
+            if self.isCurrentUserRider {
+                self.observeNearbyDrivers()
+            } else {
+                self.observeRides()
+            }
+            
+            self.setupUI()
+        }
     }
 }
 

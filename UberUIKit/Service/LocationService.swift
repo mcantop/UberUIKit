@@ -20,13 +20,8 @@ struct LocationService {
               let coordinate else { return }
         
         user.location = .init(latitude: coordinate.latitude, longitude: coordinate.longitude)
-//        user.lastLogin = Timestamp(date: .now)
         
-        do {
-            try await service.uploadUserData(user)
-        } catch {
-            print("[DEBUG] updateUserLocation error - \(error.localizedDescription)")
-        }
+        await service.uploadUserData(user)
     }
     
     func updateRideState(rideId: String, toState state: RideState) async {
@@ -50,11 +45,7 @@ extension LocationService {
             timestamp: Timestamp(date: .now)
         )
         
-        do {
-            try ServiceConstants.ridesCollection.addDocument(from: ride)
-        } catch {
-            print("[DEBUG] confirmRide error - \(error.localizedDescription)")
-        }
+        let _ = try? ServiceConstants.ridesCollection.addDocument(from: ride)
         
         return ride
     }
