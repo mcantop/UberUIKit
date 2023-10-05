@@ -8,9 +8,13 @@
 import UIKit
 import JGProgressHUD
 
+protocol AuthenticationDelegate: AnyObject {
+    func handleUserLoggedInFlow()
+}
+
 final class LoginController: UIViewController {
     // MARK: - Properties
-    weak var delegate: HomeControllerDelegate?
+    weak var delegate: AuthenticationDelegate?
     
     private let authService = AuthService.shared
     

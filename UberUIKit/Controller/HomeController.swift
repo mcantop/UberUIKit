@@ -10,7 +10,7 @@ import Firebase
 import MapKit
 
 protocol HomeControllerDelegate: AnyObject {
-    func handleUserLoggedInFlow()
+    func handleMenuToggle()
 }
 
 private enum ActionButtonType {
@@ -32,6 +32,8 @@ private enum Constants {
 
 final class HomeController: UIViewController {
     // MARK: - Properties
+    weak var delegate: HomeControllerDelegate?
+    
     private let mapView = MKMapView()
     private let service = Service.shared
     private let authService = AuthService.shared
@@ -102,7 +104,7 @@ final class HomeController: UIViewController {
     }
     
     @objc private func handleHamburgerTapped() {
-        logout()
+        delegate?.handleMenuToggle()
     }
 }
 
@@ -694,7 +696,7 @@ extension HomeController: MKMapViewDelegate {
 }
 
 // MARK: - HomeControllerDelegate
-extension HomeController: HomeControllerDelegate {
+extension HomeController: AuthenticationDelegate {
     func handleUserLoggedInFlow() {
         locationManager = LocationManager.shared
         locationManager?.delegate = self

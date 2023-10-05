@@ -21,6 +21,8 @@
 		5233C4252A9BFD9400E8AD4D /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4242A9BFD9400E8AD4D /* Reusable.swift */; };
 		5233C4272A9C24AC00E8AD4D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233C4262A9C24AC00E8AD4D /* LocationManager.swift */; };
 		524EE3562AA3141B00D616F9 /* PickupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524EE3552AA3141B00D616F9 /* PickupController.swift */; };
+		524F818E2ACF5006008D7157 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524F818D2ACF5006008D7157 /* MenuController.swift */; };
+		524F81902ACF5020008D7157 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524F818F2ACF5020008D7157 /* ContainerController.swift */; };
 		525A1A892AA2BE1F00C853CD /* MKMapView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525A1A882AA2BE1F00C853CD /* MKMapView+Extension.swift */; };
 		525A1A8B2AA2D50600C853CD /* Ride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525A1A8A2AA2D50600C853CD /* Ride.swift */; };
 		5262C70E2A9FE0E90047B5D9 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */; };
@@ -66,6 +68,8 @@
 		5233C4242A9BFD9400E8AD4D /* Reusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
 		5233C4262A9C24AC00E8AD4D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		524EE3552AA3141B00D616F9 /* PickupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupController.swift; sourceTree = "<group>"; };
+		524F818D2ACF5006008D7157 /* MenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		524F818F2ACF5020008D7157 /* ContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
 		525A1A882AA2BE1F00C853CD /* MKMapView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Extension.swift"; sourceTree = "<group>"; };
 		525A1A8A2AA2D50600C853CD /* Ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ride.swift; sourceTree = "<group>"; };
 		5262C70D2A9FE0E90047B5D9 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
@@ -117,6 +121,24 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
+		524F818B2ACF4FB4008D7157 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				52F82F0E2A894B9600816E34 /* LoginController.swift */,
+				52F82F202A8AB89C00816E34 /* RegisterController.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		524F818C2ACF4FC1008D7157 /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				524F818D2ACF5006008D7157 /* MenuController.swift */,
+				524F818F2ACF5020008D7157 /* ContainerController.swift */,
+			);
+			path = SideMenu;
+			sourceTree = "<group>";
+		};
 		52F82EE92A89424A00816E34 = {
 			isa = PBXGroup;
 			children = (
@@ -163,8 +185,8 @@
 		52F82F0A2A894AE000816E34 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				52F82F0E2A894B9600816E34 /* LoginController.swift */,
-				52F82F202A8AB89C00816E34 /* RegisterController.swift */,
+				524F818B2ACF4FB4008D7157 /* Authentication */,
+				524F818C2ACF4FC1008D7157 /* SideMenu */,
 				5283C8E12A9A87AD000593DA /* HomeController.swift */,
 				5233C41C2A9B91A400E8AD4D /* LocationDeniedController.swift */,
 				524EE3552AA3141B00D616F9 /* PickupController.swift */,
@@ -312,6 +334,7 @@
 				5283C8E72A9AA5AE000593DA /* AccountType.swift in Sources */,
 				52F82F0F2A894B9600816E34 /* LoginController.swift in Sources */,
 				5267F2682AA132600009012D /* RideActionView.swift in Sources */,
+				524F81902ACF5020008D7157 /* ContainerController.swift in Sources */,
 				5233C41B2A9B6DE100E8AD4D /* UberLoadingIndicator.swift in Sources */,
 				52F82EF82A89424B00816E34 /* SceneDelegate.swift in Sources */,
 				5233C4212A9BD9B700E8AD4D /* LocationInputView.swift in Sources */,
@@ -319,6 +342,7 @@
 				52319C9C2A9E421500DF0A4D /* LocationService.swift in Sources */,
 				52F82F1F2A8A3CA700816E34 /* UberTextFieldContainerView.swift in Sources */,
 				522CF1D52AA3F6BE00599EA6 /* GeoPoint+Extension.swift in Sources */,
+				524F818E2ACF5006008D7157 /* MenuController.swift in Sources */,
 				5233C4252A9BFD9400E8AD4D /* Reusable.swift in Sources */,
 				5233C41D2A9B91A400E8AD4D /* LocationDeniedController.swift in Sources */,
 				5233C4232A9BFCD100E8AD4D /* LocationSearchResultCell.swift in Sources */,

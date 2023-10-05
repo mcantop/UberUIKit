@@ -9,7 +9,7 @@ import UIKit
 
 final class RegisterController: UIViewController {
     // MARK: - Properties
-    weak var delegate: HomeControllerDelegate?
+    weak var delegate: AuthenticationDelegate?
     
     private let authService = AuthService.shared
     
